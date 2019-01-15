@@ -1503,10 +1503,6 @@ button::-moz-focus-inner, input::-moz-focus-inner {
    color: #000000;
 }
 
-.masonry .entry__meta-links a::after {
-   content: ", ";
-}
-
 .masonry .entry__meta-links a:last-child::after {
    display: none;
 }

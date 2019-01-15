@@ -52,7 +52,7 @@ class BlogController extends AbstractController
     }
 
     /**
-     * @Route("/post/{slug}", methods={"GET"}, name="blog_post")
+     * @Route("{username}/post/{slug}", methods={"GET"}, name="blog_post")
      */
     public function postShow(Post $post): Response
     {
