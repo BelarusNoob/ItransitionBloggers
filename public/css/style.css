@@ -1,0 +1,34 @@
+.justify-content-center {
+    -ms-flex-pack: center !important;
+    justify-content: center !important
+}
+
+.flex-row {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px
+}
+
+.header__menu {
+    list-style: none;
+    font-family: "metropolis-medium", sans-serif;
+    font-size: 15px;
+    line-height: 1.875;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    right: 120px;
+    top: 10px;
+    font-style: normal;
+    font-weight: normal;
+    color: #656565;
+}
+
+.header__menu li {
+    display: inline-block;
+    position: relative;
+    padding: 0 2rem;
+}

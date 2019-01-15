@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Entity\Comment;
 use App\Entity\Post;
+use App\Entity\Tag;
 use App\Events;
 use App\Form\CommentType;
 use App\Repository\PostRepository;
@@ -21,7 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/blog")
+ * @Route("/")
  */
 class BlogController extends AbstractController
 {
@@ -33,6 +34,8 @@ class BlogController extends AbstractController
      */
     public function index(Request $request, int $page, string $_format, PostRepository $posts, TagRepository $tags): Response
     {
+        $Tags = $this->getDoctrine()->getManager()->getRepository(Tag::class)->findAll();
+
         $tag = null;
         if ($request->query->has('tag')) {
             $tag = $tags->findOneBy(['name' => $request->query->get('tag')]);
@@ -42,11 +45,14 @@ class BlogController extends AbstractController
         // Every template name also has two extensions that specify the format and
         // engine for that template.
         // See https://symfony.com/doc/current/templating.html#template-suffix
-        return $this->render('blog/index.'.$_format.'.twig', ['posts' => $latestPosts]);
+        return $this->render('homepage/homepage.'.$_format.'.twig', [
+            'posts' => $latestPosts,
+            'Tags' => $Tags,
+        ]);
     }
 
     /**
-     * @Route("/posts/{slug}", methods={"GET"}, name="blog_post")
+     * @Route("/post/{slug}", methods={"GET"}, name="blog_post")
      */
     public function postShow(Post $post): Response
     {

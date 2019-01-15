@@ -1,128 +1,292 @@
 <!DOCTYPE html>
-<html lang="{{ app.request.locale }}">
+<html lang="en">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>{% block title %}Itransition Bloggers{% endblock %}</title>
+    <title>{% block title %}{% endblock %}</title>
 
     {% block stylesheets %}
-        <link rel="stylesheet" href="{{ asset('css/admin.1b3ff8e3.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/app.4aa95248.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+        <link href="{{ asset('https://fonts.googleapis.com/icon?family=Material+Icons') }}" rel="stylesheet">
+
+        <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
+
+        <link rel="stylesheet" href="{{ asset('css/base.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/vendor.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/main.css') }}">
+
+        <script src="{{ asset('js/modernizr.js') }}"></script>
+        <script src="{{ asset('js/pace.min.js') }}"></script>
+
+        <!-- icons -->
+        <link rel="shortcut icon" href="{{ asset('/images/favicon/favicon.ico') }}" type="image/x-icon">
+        <link rel="icon" href="{{ asset('/images/favicon/favicon.ico') }}" type="image/x-icon">
+        <link rel="apple-touch-icon" sizes="57x57" href="{{ asset('/images/favicon/apple-icon-57x57.png') }}">
+        <link rel="apple-touch-icon" sizes="60x60" href="{{ asset('/images/favicon/apple-icon-60x60.png') }}">
+        <link rel="apple-touch-icon" sizes="72x72" href="{{ asset('/images/favicon/apple-icon-72x72.png') }}">
+        <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('/images/favicon/apple-icon-76x76.png') }}">
+        <link rel="apple-touch-icon" sizes="114x114" href="{{ asset('/images/favicon/apple-icon-114x114.png') }}">
+        <link rel="apple-touch-icon" sizes="120x120" href="{{ asset('/images/favicon/apple-icon-120x120.png') }}">
+        <link rel="apple-touch-icon" sizes="144x144" href="{{ asset('/images/favicon/apple-icon-144x144.png') }}">
+        <link rel="apple-touch-icon" sizes="152x152" href="{{ asset('/images/favicon/apple-icon-152x152.png') }}">
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('/images/favicon/apple-icon-180x180.png') }}">
+        <link rel="icon" type="image/png" sizes="192x192"  href="{{ asset('/images/favicon/android-icon-192x192.png') }}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('/images/favicon/favicon-32x32.png') }}">
+        <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('/images/favicon/favicon-96x96.png') }}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('/images/favicon/favicon-16x16.png') }}">
+        <link rel="manifest" href="{{ asset('/images/favicon/manifest.json') }}">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="msapplication-TileImage" content="{{ asset('/ms-icon-144x144.png') }}">
+        <meta name="theme-color" content="#ffffff">
+
+        <!-- // icons -->
     {% endblock %}
-
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 </head>
-
 <body id="{% block body_id %}{% endblock %}">
 
 {% block header %}
-    <header>
-        <div class="navbar navbar-default navbar-static-top" role="navigation">
-            <div class="container">
-                <div class="navbar-header col-md-3 col-lg-2">
-                    <a class="navbar-brand" href="#">
-                        Itransition Bloggers
+    <section class="s-pageheader s-pageheader--home">
+
+        <header class="header">
+            <div class="header__content row">
+
+                <div class="header__logo">
+                    <a class="logo" href="{{ path('homePage') }}">
+                        <img src="{{ asset('images/logo.svg') }}" alt="Homepage">
                     </a>
-
-                    <button type="button" class="navbar-toggle"
-                            data-toggle="collapse"
-                            data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
                 </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav navbar-right">
 
-                        {
+                <ul class="header__social">
+                    <li>
+                        <a href="#0"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                    </li>
+                    <li>
+                        <a href="#0"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                    </li>
+                    <li>
+                        <a href="#0"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                    </li>
+                    <li>
+                        <a href="#0"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
+                    </li>
+                </ul>
 
-                        {% if app.user %}
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" id="user">
-                                    <i class="fa fa-user" aria-hidden="true"></i>
-                                    <span class="caret"></span>
-                                    <span class="sr-only">{{ app.user.fullname }}</span>
-                                </a>
-                                <ul class="dropdown-menu user" role="menu" aria-labelledby="user">
-                                    <li>
-                                        <a href="{{ path('user_edit') }}">
-                                            <i class="fa fa-edit" aria-hidden="true"></i>
-                                        </a>
-                                    </li>
-                                    <li class="divider"></li>
-                                    <li>
-                                        <a href="{{ path('logout') }}">
-                                            <i class="fa fa-sign-out" aria-hidden="true"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
+                <!--  <ul class="header__menu">
+                        <li><a class="current" href="{{ path('login') }}" title="">Login</a></li>
+                        <li><a class="current" href="{{ path('userRegistration') }}" title="">Register</a></li>
+                    </ul> -->
+
+                <a class="header__search-trigger" href="#0"></a>
+
+                <div class="header__search">
+
+                    <form role="search" method="get" class="header__search-form" action="#">
+                        <label>
+                            <span class="hide-content">Search for:</span>
+                            <input type="search" class="search-field" placeholder="Type Keywords" value="" name="s" title="Search for:" autocomplete="off">
+                        </label>
+                        <input type="submit" class="search-submit" value="Search">
+                    </form>
+
+                    <a href="#0" title="Close Search" class="header__overlay-close">Close</a>
+
+                </div>
+
+
+                <a class="header__toggle-menu" href="#0" title="Menu"><span>Menu</span></a>
+
+                <nav class="header__nav-wrap">
+
+                    <h2 class="header__nav-heading h6">Main menu</h2>
+
+                    <ul class="header__nav">
+                        <li class="current"><a href="{{ path('homePage') }}" title="">All posts</a></li>
+                        <li><a href="#" title="Popular">Popular</a></li>
+                        <li class="has-children">
+                            <a href="#0" title="">Categories</a>
+                            <ul class="sub-menu">
+                                <li><a href="#">Lifestyle</a></li>
+                                <li><a href="#">Health</a></li>
+                                <li><a href="#">Family</a></li>
+                                <li><a href="#">Management</a></li>
+                                <li><a href="#">Travel</a></li>
+                                <li><a href="#">Work</a></li>
+                            </ul>
+                        </li>
+                        <li class="has-children">
+                            <a href="#0" title="">Blog</a>
+                            <ul class="sub-menu">
+                                <li><a href="single-video.html">Video Post</a></li>
+                                <li><a href="single-audio.html">Audio Post</a></li>
+                                <li><a href="single-gallery.html">Gallery Post</a></li>
+                                <li><a href="single-standard.html">Standard Post</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#" title="">About</a></li>
+                        <li><a href="#" title="">Contact</a></li>
+
+                        {% if is_granted(expression('is_anonymous()')) %}
+                            <li><a href="{{ path('login') }}" title="Login">Login</a></li>
+                            <li><a href="{{ path('userRegistration') }}" title="Register">Register</a></li>
                         {% endif %}
 
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" id="locales">
-                                <i class="fa fa-globe" aria-hidden="true"></i>
-                                <span class="caret"></span>
-
-                            </a>
-                        </li>
+                        {% if is_granted(expression('not is_anonymous()')) %}
+                            <li><a href="{{ path('logout') }}" title="Logout">My Profile</a></li>
+                            <li><a href="{{ path('logout') }}" title="Logout">Logout</a></li>
+                        {% endif %}
                     </ul>
-                </div>
+
+                    <a href="#0" title="Close Menu" class="header__overlay-close close-mobile-menu">Close</a>
+
+                </nav>
+
             </div>
-        </div>
-    </header>
+        </header>
+
+    </section>
 {% endblock %}
 
-<div class="container body-container">
+<div class="body-container">
     {% block body %}
         <div class="row">
             <div id="main" class="col-sm-9">
-
 
                 {% block main %}{% endblock %}
             </div>
 
             <div id="sidebar" class="col-sm-3">
                 {% block sidebar %}
+                    {{ render_esi(controller('Symfony\\Bundle\\FrameworkBundle\\Controller\\TemplateController::templateAction', {
+                        'template': 'blog/about.html.twig',
+                        'sharedAge': 600,
+                        '_locale': app.request.locale
+                    })) }}
 
                 {% endblock %}
+
             </div>
         </div>
+
     {% endblock %}
+
 </div>
 
 {% block footer %}
-    <footer>
-        <div class="container">
+
+    <footer class="s-footer">
+
+        <div class="s-footer__main">
             <div class="row">
-                <div id="footer-copyright" class="col-md-6">
-                    <p>&copy; {{ 'now'|date('Y') }} - The Symfony Project</p>
+
+                <div class="col-two md-four mob-full s-footer__sitelinks">
+
+                    <h4>Quick Links</h4>
+
+                    <ul class="s-footer__linklist">
+                        <li><a href="#0">All posts</a></li>
+                        <li><a href="#0">Popular</a></li>
+                        <li><a href="#0">About</a></li>
+                        <li><a href="#0">Contact</a></li>
+                        <li><a href="#0">MyProfile</a></li>
+                        <li><a href="#0">Logout</a></li>
+                    </ul>
+
                 </div>
-                <div id="footer-resources" class="col-md-6">
-                    <p>
-                        <a href="https://twitter.com/symfony" title="Symfony Twitter">
-                            <i class="fa fa-twitter" aria-hidden="true"></i>
-                        </a>
-                        <a href="https://www.facebook.com/SensioLabs" title="SensioLabs Facebook">
-                            <i class="fa fa-facebook" aria-hidden="true"></i>
-                        </a>
-                        <a href="https://symfony.com/blog/" title="Symfony Blog">
-                            <i class="fa fa-rss" aria-hidden="true"></i>
-                        </a>
-                    </p>
+
+                <div class="col-two md-four mob-full s-footer__archives">
+
+                    <h4>Archives</h4>
+
+                    <ul class="s-footer__linklist">
+                        <li><a href="#0">January 2018</a></li>
+                        <li><a href="#0">December 2017</a></li>
+                        <li><a href="#0">November 2017</a></li>
+                        <li><a href="#0">October 2017</a></li>
+                        <li><a href="#0">September 2017</a></li>
+                        <li><a href="#0">August 2017</a></li>
+                    </ul>
+
+                </div>
+
+                <div class="col-two md-four mob-full s-footer__social">
+
+                    <h4>Social</h4>
+
+                    <ul class="s-footer__linklist">
+                        <li><a href="#0">Facebook</a></li>
+                        <li><a href="#0">Instagram</a></li>
+                        <li><a href="#0">Twitter</a></li>
+                        <li><a href="#0">Pinterest</a></li>
+                        <li><a href="#0">Google+</a></li>
+                        <li><a href="#0">LinkedIn</a></li>
+                    </ul>
+
+                </div>
+
+                <div class="col-five md-full end s-footer__subscribe">
+
+                    <h4>Our Newsletter</h4>
+
+                    <p>Sit vel delectus amet officiis repudiandae est voluptatem. Tempora maxime provident nisi et fuga et enim exercitationem ipsam. Culpa consequatur occaecati.</p>
+
+                    <div class="subscribe-form">
+                        <form id="mc-form" class="group" novalidate="true">
+
+                            <input type="email" value="" name="EMAIL" class="email" id="mc-email" placeholder="Email Address" required="">
+
+                            <input type="submit" name="subscribe" value="Send">
+
+                            <label for="mc-email" class="subscribe-message"></label>
+
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="s-footer__bottom">
+            <div class="row">
+                <div class="col-full">
+                    <div class="s-footer__copyright">
+                        <span>Itransition &copy; {{ 'now'|date('Y') }}</span>
+                        <span>Site Template by <a href="https://github.com/BelarusNoob/">BelarusNoob</a></span>
+                    </div>
+
+                    <div class="go-top">
+                        <a class="smoothscroll" title="Back to Top" href="#top"></a>
+                    </div>
                 </div>
             </div>
         </div>
+
     </footer>
+
+    <div id="preloader">
+        <div id="loader">
+            <div class="line-scale">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascripts %}
-    <script src="{{ asset('js/admin.4ca6ad4a.js') }}"></script>
-    <script src="{{ asset('js/app.b0ae906f.js') }}"></script>
-    <script src="{{ asset('js/login.71306f38.js') }}"></script>
-    <script src="{{ asset('js/search.6682ea4d.js') }}"></script>
+    <script src="{{ asset('https://code.jquery.com/jquery-3.3.1.slim.min.js') }}" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="{{ asset('https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js') }}" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="{{ asset('https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js') }}" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+    <script src="{{ asset('js/jquery-3.2.1.min.js') }}"></script>
+    <script src="{{ asset('js/plugins.js') }}"></script>
+    <script src="{{ asset('js/main.js') }}"></script>
 {% endblock %}
 
 </body>
+
 </html>
