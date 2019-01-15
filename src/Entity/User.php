@@ -33,7 +33,6 @@ class User implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(type="string", unique=true)
-     * @Assert\NotBlank()
      * @Assert\Length(min=2, max=50)
      */
     private $username;
@@ -60,49 +59,53 @@ class User implements UserInterface, \Serializable
      */
     private $roles = [];
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setFullName(string $fullName): void
+    public function setFullName(string $fullName): string
     {
         $this->fullName = $fullName;
+        return $this->fullName;
     }
 
-    public function getFullName(): string
+    public function getFullName(): ?string
     {
         return $this->fullName;
     }
 
-    public function getUsername(): string
+    public function getUsername(): ?string
     {
         return $this->username;
     }
 
-    public function setUsername(string $username): void
+    public function setUsername(string $username): string
     {
         $this->username = $username;
+        return $this->username;
     }
 
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
 
-    public function setEmail(string $email): void
+    public function setEmail(string $email): string
     {
         $this->email = $email;
+        return $this->email;
     }
 
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
 
-    public function setPassword(string $password): void
+    public function setPassword(string $password): string
     {
         $this->password = $password;
+        return $this->password;
     }
 
     public function getRoles(): array
@@ -117,9 +120,10 @@ class User implements UserInterface, \Serializable
         return array_unique($roles);
     }
 
-    public function setRoles(array $roles): void
+    public function setRoles(array $roles): array
     {
         $this->roles = $roles;
+        return $this->roles;
     }
 
     /**
