@@ -27,22 +27,14 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(type="string")
      * @Assert\NotBlank()
      */
-    private $firstName;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string")
-     * @Assert\NotBlank()
-     */
-    private $lastName;
+    private $fullName;
 
     /**
      * @var string
      *
      * @ORM\Column(type="string", unique=true)
      * @Assert\NotBlank()
-     * @Assert\Length(min=5, max=100)
+     * @Assert\Length(min=2, max=50)
      */
     private $username;
 
@@ -68,29 +60,19 @@ class User implements UserInterface, \Serializable
      */
     private $roles = [];
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getFirstName(): ?string
+    public function setFullName(string $fullName): void
     {
-        return $this->firstName;
+        $this->fullName = $fullName;
     }
 
-    public function setFirstName(string $firstName): void
+    public function getFullName(): string
     {
-        $this->firstName = $firstName;
-    }
-
-    public function getLastName(): string
-    {
-        return $this->lastName;
-    }
-
-    public function setLastName(string $lastName): void
-    {
-        $this->lastName = $lastName;
+        return $this->fullName;
     }
 
     public function getUsername(): string
@@ -123,10 +105,11 @@ class User implements UserInterface, \Serializable
         $this->password = $password;
     }
 
-    public function getRoles(): ?array
+    public function getRoles(): array
     {
-        return $this->roles;$roles = $this->roles;
+        $roles = $this->roles;
 
+        // guarantees that a user always has at least one role for security
         if (empty($roles)) {
             $roles[] = 'ROLE_USER';
         }
@@ -140,27 +123,32 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * Returns the salt that was originally used to encode the password.
-     *
      * {@inheritdoc}
      */
     public function getSalt(): ?string
     {
+        // See "Do you need to use a Salt?" at https://symfony.com/doc/current/cookbook/security/entity_provider.html
+        // we're using bcrypt in security.yml to encode the password, so
+        // the salt value is built-in and you don't have to generate one
+
         return null;
     }
 
     /**
-     * Removes sensitive data from the user.
-     *
      * {@inheritdoc}
      */
-    public function eraseCredentials(): void { }
+    public function eraseCredentials(): void
+    {
+        // if you had a plainPassword property, you'd nullify it here
+        // $this->plainPassword = null;
+    }
 
     /**
      * {@inheritdoc}
      */
     public function serialize(): string
     {
+        // add $this->salt too if you don't use Bcrypt or Argon2i
         return serialize([$this->id, $this->username, $this->password]);
     }
 
@@ -169,9 +157,7 @@ class User implements UserInterface, \Serializable
      */
     public function unserialize($serialized): void
     {
+        // add $this->salt too if you don't use Bcrypt or Argon2i
         [$this->id, $this->username, $this->password] = unserialize($serialized, ['allowed_classes' => false]);
     }
-
 }
-
-
