@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>{% block title %}Symfony Demo application{% endblock %}</title>
+    <title>{% block title %}Itransition Bloggers{% endblock %}</title>
 
     {% block stylesheets %}
         <link rel="stylesheet" href="{{ asset('css/admin.1b3ff8e3.css') }}">
@@ -21,7 +21,7 @@
             <div class="container">
                 <div class="navbar-header col-md-3 col-lg-2">
                     <a class="navbar-brand" href="#">
-                        Symfony Demo
+                        Itransition Bloggers
                     </a>
 
                     <button type="button" class="navbar-toggle"
@@ -85,11 +85,7 @@
 
             <div id="sidebar" class="col-sm-3">
                 {% block sidebar %}
-                    {{ render_esi(controller('Symfony\\Bundle\\FrameworkBundle\\Controller\\TemplateController::templateAction', {
-                        'template': 'blog/about.html.twig',
-                        'sharedAge': 600,
-                        '_locale': app.request.locale
-                    })) }}
+
                 {% endblock %}
             </div>
         </div>
