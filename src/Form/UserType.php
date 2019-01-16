@@ -9,11 +9,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * Defines the form used to edit an user.
- *
- * @author Romain Monteil <monteil.romain@gmail.com>
- */
 class UserType extends AbstractType
 {
     /**
@@ -26,8 +21,11 @@ class UserType extends AbstractType
                 'label' => 'label.username',
                 'disabled' => true,
             ])
-            ->add('fullName', TextType::class, [
-                'label' => 'label.fullname',
+            ->add('firstName', TextType::class, [
+                'label' => 'label.firstName',
+            ])
+            ->add('lastName', TextType::class, [
+                'label' => 'label.lastName',
             ])
             ->add('email', EmailType::class, [
                 'label' => 'label.email',

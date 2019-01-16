@@ -106,7 +106,7 @@
 
                                         <div class="entry__date">
                                             <a href="#">{{ post.publishedAt|date('Y-m-d') }}</a>
-                                            <a href="#">{{ post.author.fullName }}</a>
+                                            <a href="#">{{ post.author.firstName }} {{ post.author.lastName }}</a>
                                         </div>
                                         <h1 class="entry__title"><a href="/{{ post.author.username }}/post/{{ post.slug }}">{{ post.title }}</a></h1>
 
@@ -268,7 +268,7 @@
                         <div class="tagcloud">
 
                             {% for tag in Tags %}
-                                <a href="{{ path('blog_index', {'tag': tag.name == app.request.query.get('tag') ? null : tag.name}) }}"> {{ tag.name }} </a>
+                                <a href="{{ path('homePage', {'tag': tag.name == app.request.query.get('tag') ? null : tag.name}) }}"> {{ tag.name }} </a>
                             {% endfor %}
 
                         </div>

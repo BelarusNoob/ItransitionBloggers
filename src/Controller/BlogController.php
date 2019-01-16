@@ -27,7 +27,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class BlogController extends AbstractController
 {
     /**
-     * @Route("/", defaults={"page": "1", "_format"="html"}, methods={"GET"}, name="blog_index")
+     * @Route("/", defaults={"page": "1", "_format"="html"}, methods={"GET"}, name="homePage")
      * @Route("/rss.xml", defaults={"page": "1", "_format"="xml"}, methods={"GET"}, name="blog_rss")
      * @Route("/page/{page<[1-9]\d*>}", defaults={"_format"="html"}, methods={"GET"}, name="blog_index_paginated")
      * @Cache(smaxage="10")
@@ -99,7 +99,7 @@ class BlogController extends AbstractController
             // See https://symfony.com/doc/current/components/event_dispatcher.html
             $eventDispatcher->dispatch(Events::COMMENT_CREATED, $event);
 
-            return $this->redirectToRoute('blog_post', ['slug' => $post->getSlug()]);
+            return $this->redirectToRoute('blog_post', ['slug' => $post->getSlug(),'username' => $post->getAuthor()->getUsername()]);
         }
 
         return $this->render('blog/comment_form_error.html.twig', [

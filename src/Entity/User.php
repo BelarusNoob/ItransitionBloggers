@@ -27,7 +27,15 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(type="string")
      * @Assert\NotBlank()
      */
-    private $fullName;
+    private $firstName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     * @Assert\NotBlank()
+     */
+    private $lastName;
 
     /**
      * @var string
@@ -64,15 +72,26 @@ class User implements UserInterface, \Serializable
         return $this->id;
     }
 
-    public function setFullName(string $fullName): string
+    public function setfirstName(string $firstName): string
     {
-        $this->fullName = $fullName;
-        return $this->fullName;
+        $this->firstName = $firstName;
+        return $this->firstName;
     }
 
-    public function getFullName(): ?string
+    public function getfirstName(): ?string
     {
-        return $this->fullName;
+        return $this->firstName;
+    }
+
+    public function setlastName(string $lastName): string
+    {
+        $this->lastName = $lastName;
+        return $this->lastName;
+    }
+
+    public function getlastName(): ?string
+    {
+        return $this->lastName;
     }
 
     public function getUsername(): ?string

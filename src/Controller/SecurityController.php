@@ -13,10 +13,19 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class SecurityController extends AbstractController
 {
+    private $passwordEncoder;
+    private $helper;
+
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder, AuthenticationUtils $helper)
+    {
+        $this->passwordEncoder=$passwordEncoder;
+        $this->helper=$helper;
+    }
+
     /**
      * @Route("/register", name="userRegistration")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function register(Request $request): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -25,7 +34,7 @@ class SecurityController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
             $user->setPassword(
-                $passwordEncoder->encodePassword(
+                $this->passwordEncoder->encodePassword(
                     $user,
                     $form->get('plainPassword')->getData()
                 )
@@ -48,13 +57,13 @@ class SecurityController extends AbstractController
     /**
      * @Route("/login", name="login")
      */
-    public function login(AuthenticationUtils $helper): Response
+    public function login(): Response
     {
         return $this->render('security/login.html.twig', [
             // last username entered by the user (if any)
-            'last_username' => $helper->getLastUsername(),
+            'last_username' => $this->helper->getLastUsername(),
             // last authentication error (if any)
-            'error' => $helper->getLastAuthenticationError(),
+            'error' => $this->helper->getLastAuthenticationError(),
         ]);
     }
 
