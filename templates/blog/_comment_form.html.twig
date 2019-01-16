@@ -1,25 +1,28 @@
+<div class="respond">
 
-{{ form_start(form, {method: 'POST', action: path('comment_new', {'postSlug': post.slug, 'username': post.author.username})}) }}
-    <fieldset>
-        <legend>
-            <i class="fa fa-comment" aria-hidden="true"></i> {{ 'title.add_comment'|trans }}
-        </legend>
+    <h3 class="h2">
+        <i class="fa fa-comment" aria-hidden="true"></i> {{ 'title.add_comment'|trans }}
+    </h3>
 
-        {{ form_errors(form) }}
+    {{ form_start(form, {method: 'POST', action: path('comment_new', {'postSlug': post.slug, 'username': post.author.username})}) }}
 
-        <div class="form-group {% if not form.content.vars.valid %}has-error{% endif %}">
-            {{ form_label(form.content, 'label.content', {label_attr: {class: 'hidden'}}) }}
+        <fieldset>
+
+            {{ form_errors(form) }}
 
             {{ form_errors(form.content) }}
+            <div class="message form-field">
+                {{ form_widget(form.content, {attr: {class: 'full-width', id: 'cMessage', name: 'cMessage', placeholder: 'Your Message'} }) }}
+            </div>
 
-            {{ form_widget(form.content, {attr: {rows: 10}}) }}
             {{ form_help(form.content) }}
-        </div>
 
-        <div class="form-group">
-            <button class="btn btn-primary pull-right" type="submit">
-                <i class="fa fa-paper-plane" aria-hidden="true"></i> {{ 'action.publish_comment'|trans }}
+            <button type="submit" class="submit btn--primary btn--large full-width">
+                <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                {{ 'action.publish_comment'|trans }}
             </button>
-        </div>
-    </fieldset>
-{{ form_end(form) }}
+
+        </fieldset>
+    {{ form_end(form) }}
+
+</div>

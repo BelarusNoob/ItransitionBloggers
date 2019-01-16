@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block body_id 'homepage' %}
+{% block body_id 'top' %}
 
         {% block body %}
             <div class="pageheader-content row">
@@ -90,6 +90,7 @@
                     <div class="masonry">
 
                         <div class="grid-sizer"></div>
+
                         {% for post in posts %}
                             <article class="masonry__brick entry format-standard" data-aos="fade-up">
 

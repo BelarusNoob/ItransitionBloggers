@@ -1503,6 +1503,10 @@ button::-moz-focus-inner, input::-moz-focus-inner {
    color: #000000;
 }
 
+.masonry .entry__meta-links a{
+   margin-right: 2px;
+}
+
 .masonry .entry__meta-links a:last-child::after {
    display: none;
 }
@@ -1668,7 +1672,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
 
 .s-pageheader--home {
   /* min-height: 480px; */
-   padding-top: 222px;
+  /* padding-top: 222px; */
 }
 
 .header {

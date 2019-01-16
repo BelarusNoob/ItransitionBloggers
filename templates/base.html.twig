@@ -103,6 +103,11 @@
                     <ul class="header__nav">
                         <li class="current"><a href="{{ path('homePage') }}" title="">All posts</a></li>
                         <li><a href="#" title="Popular">Popular</a></li>
+
+                        {% if is_granted(expression('not is_anonymous()')) %}
+                            <li><a href="#" title="">Preferences</a></li>
+                        {% endif %}
+
                         <li class="has-children">
                             <a href="#0" title="">Categories</a>
                             <ul class="sub-menu">
@@ -114,17 +119,7 @@
                                 <li><a href="#">Work</a></li>
                             </ul>
                         </li>
-                        <li class="has-children">
-                            <a href="#0" title="">Blog</a>
-                            <ul class="sub-menu">
-                                <li><a href="single-video.html">Video Post</a></li>
-                                <li><a href="single-audio.html">Audio Post</a></li>
-                                <li><a href="single-gallery.html">Gallery Post</a></li>
-                                <li><a href="single-standard.html">Standard Post</a></li>
-                            </ul>
-                        </li>
                         <li><a href="{{ path('about') }}" title="">About</a></li>
-                        <li><a href="#" title="">Contact</a></li>
 
                         {% if is_granted(expression('is_anonymous()')) %}
                             <li><a href="{{ path('login') }}" title="Login">Login</a></li>
@@ -157,11 +152,6 @@
 
             <div id="sidebar" class="col-sm-3">
                 {% block sidebar %}
-                    {{ render_esi(controller('Symfony\\Bundle\\FrameworkBundle\\Controller\\TemplateController::templateAction', {
-                        'template': 'blog/about.html.twig',
-                        'sharedAge': 600,
-                        '_locale': app.request.locale
-                    })) }}
 
                 {% endblock %}
 
