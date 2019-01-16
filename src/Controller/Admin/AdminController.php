@@ -14,14 +14,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/admin/post")
+ * @Route("/dashboard")
  * @IsGranted("ROLE_ADMIN")
  */
 
 class AdminController extends AbstractController
 {
     /**
-     * @Route("/admin", name="admin")
+     * @Route("/dashboard/admin/", name="dashboard_admin")
      */
     public function admin()
     {

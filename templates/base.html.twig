@@ -43,7 +43,7 @@
         <!-- // icons -->
     {% endblock %}
 </head>
-<body id="{% block body_id %}{% endblock %}">
+<body id="{% block body_id %}top{% endblock %}">
 
 {% block header %}
     <section class="s-pageheader s-pageheader--home">
@@ -108,17 +108,6 @@
                             <li><a href="#" title="">Preferences</a></li>
                         {% endif %}
 
-                        <li class="has-children">
-                            <a href="#0" title="">Categories</a>
-                            <ul class="sub-menu">
-                                <li><a href="#">Lifestyle</a></li>
-                                <li><a href="#">Health</a></li>
-                                <li><a href="#">Family</a></li>
-                                <li><a href="#">Management</a></li>
-                                <li><a href="#">Travel</a></li>
-                                <li><a href="#">Work</a></li>
-                            </ul>
-                        </li>
                         <li><a href="{{ path('about') }}" title="">About</a></li>
 
                         {% if is_granted(expression('is_anonymous()')) %}

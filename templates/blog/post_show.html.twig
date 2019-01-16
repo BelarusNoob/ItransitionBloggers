@@ -37,7 +37,13 @@
 
                 {{ post.content }}
 
-                {{ include('blog/_post_tags.html.twig') }}
+
+                <p class="s-content__tags">
+                    <span>Post Tags</span>
+                    <span class="s-content__tag-list">
+                        {{ include('blog/_post_tags.html.twig') }}
+                    </span>
+                </p>
 
                 <div class="s-content__author">
                     <img src="{{ asset('images/avatars/user-03.jpg') }}" alt="">
@@ -74,64 +80,7 @@
 
         {% endblock %}
 
-        <div class="comments-wrap">
-
-            <div id="comments" class="row">
-                <div class="col-full">
-
-                    <h3 class="h2">{{ 'post.num_comments'|trans({ 'count': post.comments|length }) }}</h3>
-
-                    <ol class="commentlist">
-
-                        {% for comment in post.comments %}
-
-                            <li class="depth-1 comment">
-
-                                <div class="comment__avatar">
-                                    <img width="50" height="50" class="avatar" src="{{ asset('images/avatars/user-01.jpg') }}" alt="">
-                                </div>
-
-                                <div class="comment__content">
-
-                                    <div class="comment__info">
-                                        <cite>{{ comment.author.username }}</cite>
-
-                                        <div class="comment__meta">
-                                            <time class="comment__time">{{ comment.publishedAt|date('M d, Y @ h:i:s') }}</time>
-                                            <a class="reply" href="#0">Reply</a>
-                                        </div>
-                                    </div>
-
-                                    <div class="comment__text">
-                                        {{ comment.content }}
-                                    </div>
-
-                                </div>
-
-                            </li>
-                        {% else %}
-                            <div class="post-comment">
-                                <p>{{ 'post.no_comments'|trans }}</p>
-                            </div>
-                        {% endfor %}
-
-                    </ol>
-
-                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                        {{ render(controller('App\\Controller\\BlogController::commentForm', {'id': post.id})) }}
-                    {% else %}
-                        <p>
-                            <a class="btn btn-success" href="{{ path('login', {'redirect_to': app.request.pathInfo}) }}">
-                                <i class="fa fa-sign-in" aria-hidden="true"></i> {{ 'action.sign_in'|trans }}
-                            </a>
-                            {{ 'post.to_publish_a_comment'|trans }}
-                        </p>
-                    {% endif %}
-
-                </div>
-
-            </div>
-        </div>
+        {{ include('blog/_comments.html.twig') }}
 
     </section>
 {% endblock %}
