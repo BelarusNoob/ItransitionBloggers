@@ -24,6 +24,10 @@ class SecurityController extends AbstractController
 
     /**
      * @Route("/register", name="userRegistration")
+     *
+     * @param Request $request
+     *
+     * @return Response
      */
     public function register(Request $request): Response
     {
@@ -32,7 +36,6 @@ class SecurityController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
             $user->setPassword(
                 $this->passwordEncoder->encodePassword(
                     $user,
@@ -45,6 +48,7 @@ class SecurityController extends AbstractController
             $entityManager->flush();
 
             // do anything else you need here, like send an email
+            // TODO: email verification
 
             return $this->redirectToRoute('login');
         }
@@ -60,9 +64,7 @@ class SecurityController extends AbstractController
     public function login(): Response
     {
         return $this->render('security/login.html.twig', [
-            // last username entered by the user (if any)
             'last_username' => $this->helper->getLastUsername(),
-            // last authentication error (if any)
             'error' => $this->helper->getLastAuthenticationError(),
         ]);
     }

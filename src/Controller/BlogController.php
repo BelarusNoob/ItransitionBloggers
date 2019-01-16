@@ -26,25 +26,39 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class BlogController extends AbstractController
 {
+    private $eventDispatcher;
+    private $posts;
+    private $tags;
+
+    public function __construct(EventDispatcherInterface $eventDispatcher, PostRepository $posts, TagRepository $tags)
+    {
+        $this->eventDispatcher=$eventDispatcher;
+        $this->posts=$posts;
+        $this->tags=$tags;
+    }
+
     /**
      * @Route("/", defaults={"page": "1", "_format"="html"}, methods={"GET"}, name="homePage")
      * @Route("/rss.xml", defaults={"page": "1", "_format"="xml"}, methods={"GET"}, name="blog_rss")
      * @Route("/page/{page<[1-9]\d*>}", defaults={"_format"="html"}, methods={"GET"}, name="blog_index_paginated")
      * @Cache(smaxage="10")
+     *
+     * @param Request $request
+     * @param int $page
+     * @param string $_format
+     *
+     * @return Response
      */
-    public function index(Request $request, int $page, string $_format, PostRepository $posts, TagRepository $tags): Response
+    public function index(Request $request, int $page, string $_format): Response
     {
         $Tags = $this->getDoctrine()->getManager()->getRepository(Tag::class)->findAll();
 
         $tag = null;
         if ($request->query->has('tag')) {
-            $tag = $tags->findOneBy(['name' => $request->query->get('tag')]);
+            $tag = $this->tags->findOneBy(['name' => $request->query->get('tag')]);
         }
-        $latestPosts = $posts->findLatest($page, $tag);
+        $latestPosts = $this->posts->findLatest($page, $tag);
 
-        // Every template name also has two extensions that specify the format and
-        // engine for that template.
-        // See https://symfony.com/doc/current/templating.html#template-suffix
         return $this->render('homepage/homepage.'.$_format.'.twig', [
             'posts' => $latestPosts,
             'Tags' => $Tags,
@@ -53,16 +67,13 @@ class BlogController extends AbstractController
 
     /**
      * @Route("{username}/post/{slug}", methods={"GET"}, name="blog_post")
+     *
+     * @param Post $post
+     *
+     * @return Response
      */
     public function postShow(Post $post): Response
     {
-        // Symfony's 'dump()' function is an improved version of PHP's 'var_dump()' but
-        // it's not available in the 'prod' environment to prevent leaking sensitive information.
-        // It can be used both in PHP files and Twig templates, but it requires to
-        // have enabled the DebugBundle. Uncomment the following line to see it in action:
-        //
-        // dump($post, $this->getUser(), new \DateTime());
-
         return $this->render('blog/post_show.html.twig', ['post' => $post]);
     }
 
@@ -70,8 +81,13 @@ class BlogController extends AbstractController
      * @Route("/comment/{postSlug}/new", methods={"POST"}, name="comment_new")
      * @IsGranted("IS_AUTHENTICATED_FULLY")
      * @ParamConverter("post", options={"mapping": {"postSlug": "slug"}})
+     *
+     * @param Request $request
+     * @param Post $post
+     *
+     * @return Response
      */
-    public function commentNew(Request $request, Post $post, EventDispatcherInterface $eventDispatcher): Response
+    public function commentNew(Request $request, Post $post): Response
     {
         $comment = new Comment();
         $comment->setAuthor($this->getUser());
@@ -85,19 +101,9 @@ class BlogController extends AbstractController
             $em->persist($comment);
             $em->flush();
 
-            // When triggering an event, you can optionally pass some information.
-            // For simple applications, use the GenericEvent object provided by Symfony
-            // to pass some PHP variables. For more complex applications, define your
-            // own event object classes.
-            // See https://symfony.com/doc/current/components/event_dispatcher/generic_event.html
             $event = new GenericEvent($comment);
 
-            // When an event is dispatched, Symfony notifies it to all the listeners
-            // and subscribers registered to it. Listeners can modify the information
-            // passed in the event and they can even modify the execution flow, so
-            // there's no guarantee that the rest of this controller will be executed.
-            // See https://symfony.com/doc/current/components/event_dispatcher.html
-            $eventDispatcher->dispatch(Events::COMMENT_CREATED, $event);
+            $this->eventDispatcher->dispatch(Events::COMMENT_CREATED, $event);
 
             return $this->redirectToRoute('blog_post', ['slug' => $post->getSlug(),'username' => $post->getAuthor()->getUsername()]);
         }
@@ -110,6 +116,7 @@ class BlogController extends AbstractController
 
     /**
      * @param Post $post
+     *
      * @return Response
      */
     public function commentForm(Post $post): Response
@@ -124,8 +131,12 @@ class BlogController extends AbstractController
 
     /**
      * @Route("/search", methods={"GET"}, name="blog_search")
+     *
+     * @param Request $request
+     *
+     * @return Response
      */
-    public function search(Request $request, PostRepository $posts): Response
+    public function search(Request $request): Response
     {
         if (!$request->isXmlHttpRequest()) {
             return $this->render('blog/search.html.twig');
@@ -133,7 +144,7 @@ class BlogController extends AbstractController
 
         $query = $request->query->get('q', '');
         $limit = $request->query->get('l', 10);
-        $foundPosts = $posts->findBySearchQuery($query, $limit);
+        $foundPosts = $this->posts->findBySearchQuery($query, $limit);
 
         $results = [];
         foreach ($foundPosts as $post) {

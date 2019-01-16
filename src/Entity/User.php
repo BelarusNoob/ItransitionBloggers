@@ -150,10 +150,6 @@ class User implements UserInterface, \Serializable
      */
     public function getSalt(): ?string
     {
-        // See "Do you need to use a Salt?" at https://symfony.com/doc/current/cookbook/security/entity_provider.html
-        // we're using bcrypt in security.yml to encode the password, so
-        // the salt value is built-in and you don't have to generate one
-
         return null;
     }
 
@@ -162,8 +158,7 @@ class User implements UserInterface, \Serializable
      */
     public function eraseCredentials(): void
     {
-        // if you had a plainPassword property, you'd nullify it here
-        // $this->plainPassword = null;
+
     }
 
     /**
@@ -171,7 +166,6 @@ class User implements UserInterface, \Serializable
      */
     public function serialize(): string
     {
-        // add $this->salt too if you don't use Bcrypt or Argon2i
         return serialize([$this->id, $this->username, $this->password]);
     }
 
@@ -180,7 +174,6 @@ class User implements UserInterface, \Serializable
      */
     public function unserialize($serialized): void
     {
-        // add $this->salt too if you don't use Bcrypt or Argon2i
         [$this->id, $this->username, $this->password] = unserialize($serialized, ['allowed_classes' => false]);
     }
 
