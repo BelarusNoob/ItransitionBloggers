@@ -15,12 +15,6 @@
     {{ include('blog/_post_tags.html.twig') }}
 
     <div id="post-add-comment" class="well">
-        {# The 'IS_AUTHENTICATED_FULLY' role ensures that the user has entered
-        his/her credentials (login + password) during this session. If he/she
-        is automatically logged via the 'Remember Me' functionality, he/she won't
-        be able to add a comment.
-        See https://symfony.com/doc/current/security/remember_me.html#forcing-the-user-to-re-authenticate-before-accessing-certain-resources
-        #}
         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
             {{ render(controller('App\\Controller\\BlogController::commentForm', {'id': post.id})) }}
         {% else %}
@@ -42,9 +36,6 @@
             <a name="comment_{{ comment.id }}"></a>
             <h4 class="col-sm-3">
                 <strong>{{ post.author.firstName }} {{ post.author.lastName }}</strong> {{ 'post.commented_on'|trans }}
-                {# it's not mandatory to set the timezone in localizeddate(). This is done to
-                   avoid errors when the 'intl' PHP extension is not available and the application
-                   is forced to use the limited "intl polyfill", which only supports UTC and GMT #}
                 <strong>{{ comment.publishedAt|date('Y-m-d') }}</strong>
             </h4>
             <div class="col-sm-9">
@@ -59,7 +50,7 @@
 {% endblock %}
 
 {% block sidebar %}
-    {% if is_granted('edit', post) %}
+    {% if is_granted('ROLE_USER') %}
         <div class="section">
             <a class="btn btn-lg btn-block btn-success" href="{{ path('admin_post_edit', {id: post.id}) }}">
                 <i class="fa fa-edit" aria-hidden="true"></i> {{ 'action.edit_post'|trans }}

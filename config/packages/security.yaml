@@ -39,18 +39,18 @@ security:
                 csrf_token_generator: security.csrf.token_manager
                 # The page users are redirect to when there is no previous page stored in the
                 # session (for example when the users access directly to the login page).
-                default_target_path: user_edit
+                default_target_path: homePage
 
             logout:
                 # The route name the user can go to in order to logout
                 path: logout
                 # The name of the route to redirect to after logging out
-                target: user_edit
+                target: homePage
 
     access_control:
         - { path: '^/admin', roles: ROLE_USER }
         # - { path: '^/admin', roles: ROLE_USER }
-        # - { path: ^/profile, roles: ROLE_USER }
+        # - { path: ^{username}/profile, roles: ROLE_USER }
         # - { path: ^/admin, roles: ROLE_ADMIN }
 
     role_hierarchy:
