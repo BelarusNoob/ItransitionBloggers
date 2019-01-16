@@ -1,16 +1,58 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Register{% endblock %}
+{% extends "base.html.twig" %}
 
 {% block body %}
-    <h1>Register</h1>
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.username) }}
-        {{ form_row(registrationForm.fullName) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword) }}
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        <h2 class="text-center">To register you need to <a href={{ url('logout') }}>logout</a></h2>
+    {% else %}
+        <section class="s-content">
+            <div class="container">
+                <div class="flex-row justify-content-center">
+                    <div class="col-md-8 box">
+                        <h2 class="mb-5 text-center">Create new account</h2>
+                        {{ form_start(registrationForm) }}
+                        <div class="form-group">
+                            {{ form_errors(registrationForm.username) }}
+                            <div class="col-sm-12">
+                                {{ form_label(registrationForm.username ) }}
+                                {{ form_widget(registrationForm.username, { 'attr': {'class': 'form-control'} }) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {{ form_errors(registrationForm.email) }}
+                            <div class="col-sm-12">
+                                {{ form_label(registrationForm.email) }}
+                                {{ form_widget(registrationForm.email, { 'attr': {'class': 'form-control'} }) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {{ form_errors(registrationForm.plainPassword) }}
+                            <div class="col-sm-12">
+                                {{ form_label(registrationForm.plainPassword) }}
+                                {{ form_widget(registrationForm.plainPassword, { 'attr': {'class': 'form-control'} }) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
 
-        <button class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+                            {{ form_errors(registrationForm.fullName) }}
+                            <div class="col-sm-12">
+                                {{ form_label(registrationForm.fullName) }}
+                                {{ form_widget(registrationForm.fullName, { 'attr': {'class': 'form-control'} }) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <br>
+                                <button type="submit" class="btn btn-default">{% trans %}register{% endtrans %}</button> {% trans %}or{% endtrans %}
+                                <a class="btn btn-default" href={{ url('login') }}>{% trans %}login{% endtrans %}</a>
+                            </div>
+                        </div>
+                        {{ form_end(registrationForm) }}
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    {% endif %}
+
 {% endblock %}
