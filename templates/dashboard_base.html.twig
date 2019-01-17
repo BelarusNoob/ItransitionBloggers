@@ -29,9 +29,17 @@
     </head>
     <body id="{% block body_id %}{% endblock %}" class="hold-transition skin-blue sidebar-mini">
 
-    {% block body %}
+    <div class="wrapper">
+        {{ include('admin/dashboard_components/_dashboard_header.html.twig') }}
 
-    {% endblock %}
+        {{ include('admin/dashboard_components/_dashboard_sidebar.html.twig') }}
+        
+        {% block body %}
+
+        {% endblock %}
+
+        {{ include('admin/dashboard_components/_dashboard_footer.html.twig') }}
+    </div>
 
     {% block javascripts %}
         <script src="{{ asset('admin/js/jquery.min.js') }}"></script>

@@ -45,7 +45,9 @@ class AdminController extends AbstractController
         return $this->render('admin/admin.html.twig', [
             'controller_name' => 'AdminController',
             'posts' => $this->posts->findAll(),
+            'latestPosts' => $this->posts->findLatest(),
             'comments' => $this->comments->findAll(),
+            'latestComments' => $this->comments->findLatest(),
             'users' => $this->users->findAll(),
             'tags' => $this->tags->findAll()
         ]);
@@ -61,7 +63,7 @@ class AdminController extends AbstractController
     {
         $authorPosts = $this->posts->findBy(['author' => $this->getUser()], ['publishedAt' => 'DESC']);
 
-        return $this->render('admin/blog/index.html.twig', ['posts' => $authorPosts]);
+        return $this->render('admin/blog/blog.html.twig', ['posts' => $authorPosts]);
     }
 
     /**
@@ -105,65 +107,63 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/{id<\d+>}", methods={"GET"}, name="admin_post_show")
+     * @Route("/{username}/post/{id<\d+>}", methods={"GET"}, name="admin_post_show")
      *
      * @return Response
      */
-    public function show(): Response
+    public function show(Post $post): Response
     {
-        $this->denyAccessUnlessGranted('show', $this->posts, 'Posts can only be shown to their authors.');
-
         return $this->render('admin/blog/show.html.twig', [
-            'post' => $this->posts,
+            'post' => $post,
         ]);
     }
 
     /**
-     * @Route("/{id<\d+>}/edit",methods={"GET", "POST"}, name="admin_post_edit")
+     * @Route("/{username}/post/{id<\d+>}/edit",methods={"GET", "POST"}, name="admin_post_edit")
      * @IsGranted("edit", subject="post", message="Posts can only be edited by their authors.")
      *
      * @param Request $request
      *
      * @return Response
      */
-    public function edit(Request $request): Response
+    public function edit(Request $request, Post $post): Response
     {
-        $form = $this->createForm(PostType::class, $this->posts);
+        $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->posts->setSlug(Slugger::slugify($this->posts->getTitle()));
+            $post->setSlug(Slugger::slugify($post->getTitle()));
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', 'post.updated_successfully');
 
-            return $this->redirectToRoute('admin_post_edit', ['id' => $this->posts->getId()]);
+            return $this->redirectToRoute('admin_post_edit', ['id' => $post->getId()]);
         }
 
         return $this->render('admin/blog/edit.html.twig', [
-            'post' => $this->posts,
+            'post' => $post,
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/{id}/delete", methods={"POST"}, name="admin_post_delete")
+     * @Route("/{username}/post/{id}/delete", methods={"POST"}, name="admin_post_delete")
      * @IsGranted("delete", subject="post")
      *
      * @param Request $request
      *
      * @return Response
      */
-    public function delete(Request $request): Response
+    public function delete(Request $request, Post $post): Response
     {
         if (!$this->isCsrfTokenValid('delete', $request->request->get('token'))) {
             return $this->redirectToRoute('admin_post_index');
         }
 
-        $this->posts->getTags()->clear();
+        $post->getTags()->clear();
 
         $em = $this->getDoctrine()->getManager();
-        $em->remove($this->posts);
+        $em->remove($post);
         $em->flush();
 
         $this->addFlash('success', 'post.deleted_successfully');
