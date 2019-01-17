@@ -4,7 +4,10 @@ namespace App\Controller\Admin;
 
 use App\Entity\Post;
 use App\Form\PostType;
+use App\Repository\CommentRepository;
 use App\Repository\PostRepository;
+use App\Repository\TagRepository;
+use App\Repository\UserRepository;
 use App\Utils\Slugger;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,31 +20,46 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/dashboard")
  * @IsGranted("ROLE_ADMIN")
  */
-
 class AdminController extends AbstractController
 {
-    /**
-     * @Route("/dashboard/admin/", name="dashboard_admin")
-     */
-    public function admin()
+    private $users,$posts,$comments,$tags;
+
+    public function __construct(UserRepository $users,
+                                PostRepository $posts,
+                                CommentRepository $comments,
+                                TagRepository $tags)
     {
-        return $this->render('admin/admin.html.twig', [
-            'controller_name' => 'AdminController',
-        ]);
+        $this->users=$users;
+        $this->posts=$posts;
+        $this->comments=$comments;
+        $this->tags=$tags;
     }
 
     /**
      * @Route("/", methods={"GET"}, name="admin_index")
-     * @Route("/", methods={"GET"}, name="admin_post_index")
      *
-     * @param PostRepository $posts
+     * @return Response
+     */
+    public function index(): Response
+    {
+        return $this->render('admin/admin.html.twig', [
+            'controller_name' => 'AdminController',
+            'posts' => $this->posts->findAll(),
+            'comments' => $this->comments->findAll(),
+            'users' => $this->users->findAll(),
+            'tags' => $this->tags->findAll()
+        ]);
+    }
+
+    /**
+     * @Route("/blog", methods={"GET"}, name="admin_post_index")
      *
      * @return Response
      */
 
-    public function index(PostRepository $posts): Response
+    public function blog(): Response
     {
-        $authorPosts = $posts->findBy(['author' => $this->getUser()], ['publishedAt' => 'DESC']);
+        $authorPosts = $this->posts->findBy(['author' => $this->getUser()], ['publishedAt' => 'DESC']);
 
         return $this->render('admin/blog/index.html.twig', ['posts' => $authorPosts]);
     }
@@ -87,61 +105,65 @@ class AdminController extends AbstractController
     }
 
     /**
-     * Finds and displays a Post entity.
-     *
      * @Route("/{id<\d+>}", methods={"GET"}, name="admin_post_show")
+     *
+     * @return Response
      */
-    public function show(Post $post): Response
+    public function show(): Response
     {
-        $this->denyAccessUnlessGranted('show', $post, 'Posts can only be shown to their authors.');
+        $this->denyAccessUnlessGranted('show', $this->posts, 'Posts can only be shown to their authors.');
 
         return $this->render('admin/blog/show.html.twig', [
-            'post' => $post,
+            'post' => $this->posts,
         ]);
     }
 
     /**
-     * Displays a form to edit an existing Post entity.
-     *
      * @Route("/{id<\d+>}/edit",methods={"GET", "POST"}, name="admin_post_edit")
      * @IsGranted("edit", subject="post", message="Posts can only be edited by their authors.")
+     *
+     * @param Request $request
+     *
+     * @return Response
      */
-    public function edit(Request $request, Post $post): Response
+    public function edit(Request $request): Response
     {
-        $form = $this->createForm(PostType::class, $post);
+        $form = $this->createForm(PostType::class, $this->posts);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $post->setSlug(Slugger::slugify($post->getTitle()));
+            $this->posts->setSlug(Slugger::slugify($this->posts->getTitle()));
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', 'post.updated_successfully');
 
-            return $this->redirectToRoute('admin_post_edit', ['id' => $post->getId()]);
+            return $this->redirectToRoute('admin_post_edit', ['id' => $this->posts->getId()]);
         }
 
         return $this->render('admin/blog/edit.html.twig', [
-            'post' => $post,
+            'post' => $this->posts,
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * Deletes a Post entity.
-     *
      * @Route("/{id}/delete", methods={"POST"}, name="admin_post_delete")
      * @IsGranted("delete", subject="post")
+     *
+     * @param Request $request
+     *
+     * @return Response
      */
-    public function delete(Request $request, Post $post): Response
+    public function delete(Request $request): Response
     {
         if (!$this->isCsrfTokenValid('delete', $request->request->get('token'))) {
             return $this->redirectToRoute('admin_post_index');
         }
 
-        $post->getTags()->clear();
+        $this->posts->getTags()->clear();
 
         $em = $this->getDoctrine()->getManager();
-        $em->remove($post);
+        $em->remove($this->posts);
         $em->flush();
 
         $this->addFlash('success', 'post.deleted_successfully');
