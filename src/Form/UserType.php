@@ -45,7 +45,7 @@ class UserType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('image', FileType::class, ['label' => 'Photo (PNG file)'])
+            ->add('image', FileType::class, ['label' => 'Photo (PNG/JPG/JPEG file)'])
         ;
     }
 
