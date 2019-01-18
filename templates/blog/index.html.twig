@@ -6,7 +6,7 @@
     {% for post in posts %}
         <article class="post">
             <h2>
-                <a href="{{ path('blog_post', {slug: post.slug}) }}">
+                <a href="{{ path('blog_post', {'username': post.author.username, 'slug': post.slug}) }}">
                     {{ post.title }}
                 </a>
             </h2>

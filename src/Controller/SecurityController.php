@@ -58,9 +58,11 @@ class SecurityController extends AbstractController
 
             $user->setImage($fileName);
 
-            if ($form->get('id')->getData()==true)
+            if ($form->get('IsBlogger')->getData()==true)
             {
-                $user->setRoles('ROLE_BLOGGER');
+                $user->setRoles(
+                    ['ROLE_BLOGGER']
+                );
             }
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);

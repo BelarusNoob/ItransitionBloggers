@@ -106,8 +106,8 @@
                                     <div class="entry__header">
 
                                         <div class="entry__date">
-                                            <a href="#">{{ post.publishedAt|date('Y-m-d') }}</a>
-                                            <a href="#">{{ post.author.firstName }} {{ post.author.lastName }}</a>
+                                            <a href="#">{{ post.publishedAt|date('M d, Y') }}</a>
+                                            <a href="#">{{ post.author.username }}</a>
                                         </div>
                                         <h1 class="entry__title"><a href="/{{ post.author.username }}/post/{{ post.slug }}">{{ post.title }}</a></h1>
 

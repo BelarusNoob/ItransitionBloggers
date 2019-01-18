@@ -1,13 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block javascripts %}
-    {{ parent() }}
-    {{ encore_entry_script_tags('js/search') }}
-{% endblock %}
-
 {% block body_id 'blog_search' %}
 
-{% block main %}
+{% block body %}
     <form action="{{ path('blog_search') }}" method="get">
         <div class="form-group">
             <input name="q"
@@ -24,8 +19,3 @@
     </div>
 {% endblock %}
 
-{% block sidebar %}
-    {{ parent() }}
-
-    {{ show_source_code(_self) }}
-{% endblock %}

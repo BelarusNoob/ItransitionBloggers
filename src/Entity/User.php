@@ -107,6 +107,16 @@ class User implements UserInterface, \Serializable
      */
     private $following;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $IsActive;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $IsBlogger;
+
 
     public function __construct()
     {
@@ -114,6 +124,8 @@ class User implements UserInterface, \Serializable
         $this->followers = new ArrayCollection();
         $this->following = new ArrayCollection();
         $this->regDate = new \DateTime();
+        $this->IsActive = true;
+        $this->IsBlogger = false;
     }
 
     public function getId(): ?int
@@ -231,7 +243,7 @@ class User implements UserInterface, \Serializable
         return $this->info;
     }
 
-    public function setInfo(?string $info): self
+    public function setInfo(string $info)
     {
         $this->info = $info;
 
@@ -285,5 +297,29 @@ class User implements UserInterface, \Serializable
         }
 
         $this->getFollowing()->add($userToFollow);
+    }
+
+    public function getIsActive(): ?bool
+    {
+        return $this->IsActive;
+    }
+
+    public function setIsActive(bool $IsActive): self
+    {
+        $this->IsActive = $IsActive;
+
+        return $this;
+    }
+
+    public function getIsBlogger(): ?bool
+    {
+        return $this->IsBlogger;
+    }
+
+    public function setIsBlogger(bool $IsBlogger): self
+    {
+        $this->IsBlogger = $IsBlogger;
+
+        return $this;
     }
 }

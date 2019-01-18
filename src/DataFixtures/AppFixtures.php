@@ -29,13 +29,15 @@ class AppFixtures extends Fixture
 
     private function loadUsers(ObjectManager $manager)
     {
-        foreach ($this->getUserData() as [$firstname,$lastName, $username, $password, $email, $roles]) {
+        foreach ($this->getUserData() as [$username, $firstName,$lastName, $password, $email, $image, $info, $roles]) {
             $user = new User();
-            $user->setfirstName($firstname);
-            $user->setlastName($lastName);
             $user->setUsername($username);
+            $user->setfirstName($firstName);
+            $user->setlastName($lastName);
             $user->setPassword($this->passwordEncoder->encodePassword($user, $password));
             $user->setEmail($email);
+            $user->setImage($image);
+            $user->setInfo($info);
             $user->setRoles($roles);
 
             $manager->persist($user);
@@ -72,7 +74,7 @@ class AppFixtures extends Fixture
 
             foreach (range(1, 5) as $i) {
                 $comment = new Comment();
-                $comment->setAuthor($this->getReference('john_user'));
+                $comment->setAuthor($this->getReference('MrSmith'));
                 $comment->setContent($this->getRandomText(random_int(255, 512)));
                 $comment->setPublishedAt(new \DateTime('now + '.$i.'seconds'));
 
@@ -88,25 +90,33 @@ class AppFixtures extends Fixture
     private function getUserData(): array
     {
         return [
-            // $userData = [$firstName, $lastName, $username, $password, $email, $roles];
-            ['Jane', 'Doe', 'jane_admin', 'kitten', 'jane_admin@symfony.com', ['ROLE_ADMIN']],
-            ['Tom', 'Doe', 'tom_admin', 'kitten', 'tom_admin@symfony.com', ['ROLE_ADMIN']],
-            ['John', 'Doe', 'john_user', 'kitten', 'john_user@symfony.com', ['ROLE_USER']],
+            // $userData = [$username, $firstName, $lastName, $password, $email, $image, $info, $roles];
+            ['BelarusNoob', 'Nikita', 'Novosyolov', '9429686by', 'navak.navak@gmail.com', 'admin.jpg',
+                'Simple man form Belarus, blogger, traveler, photographer. ' .
+                'I love normal human communication without regalia and posturing. ', ['ROLE_ADMIN']],
+            ['BoevoiBuryat', 'Tigin', 'Nurlaev', 'kitten', 'BoevoiBuryat@symfony.com',  'moderator.jpg', 'Монгол Улсын Төрийн дуулал
+                Дархан манай хувьсгалт улс
+                Даяар монголын ариун голомт
+                Дайсны хөлд хэзээ ч орохгүй
+                Дандаа энхжин үүрд мөнхөжнө
+                Хамаг дэлхийн шударга улстай', ['ROLE_MODERATOR']],
+            ['MrsLucky', 'Ann', 'Hataway', 'kitten', 'MrsLucky@symfony.com', 'blogger.jpg', 'Young beautiful girl form Narilsk with iron eggs ',['ROLE_BLOGGER']],
+            ['MrSmith', 'Alex', 'Smith', 'kitten', 'MrSmith@random.com', 'user.png', 'Simple gey from Minsk', ['ROLE_USER']],
         ];
     }
 
     private function getTagData(): array
     {
         return [
-            'lorem',
-            'ipsum',
-            'consectetur',
-            'adipiscing',
-            'incididunt',
-            'labore',
-            'voluptate',
-            'dolore',
-            'pariatur',
+            'Sport',
+            'Tourism',
+            'Travel',
+            'Body',
+            'Cars',
+            'Guns',
+            'Beauty',
+            'Food',
+            'Study',
         ];
     }
 
@@ -121,8 +131,7 @@ class AppFixtures extends Fixture
                 $this->getRandomText(),
                 $this->getPostContent(),
                 new \DateTime('now - '.$i.'days'),
-                // Ensure that the first post is written by Jane Doe to simplify tests
-                $this->getReference(['jane_admin', 'tom_admin'][0 === $i ? 0 : random_int(0, 1)]),
+                $this->getReference(['BelarusNoob', 'MrsLucky'][0 === $i ? 0 : random_int(0, 1)]),
                 $this->getRandomTags(),
             ];
         }

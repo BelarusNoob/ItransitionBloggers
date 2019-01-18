@@ -43,10 +43,9 @@ class RegistrationFormType extends AbstractType
                 ],
             ])
             ->add('image', FileType::class, ['label' => 'Photo (PNG/JPG/JPEG file) 300x300px '])
-            ->add('id', CheckboxType::class, [
+            ->add('IsBlogger', CheckboxType::class, [
                 'label'    => 'I want to be a blogger',
                 'required' => false,
-                'value' => 'true'
             ])
         ;
     }
