@@ -2,9 +2,12 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -61,11 +64,57 @@ class User implements UserInterface, \Serializable
     private $password;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $info;
+
+    /**
+     * @ORM\Column(type="string")
+     *
+     * @Assert\NotBlank(message="Please, upload the product brochure as a PNG/JPG/JPEG file.")
+     * @Assert\File(mimeTypes={ "image/jpeg", "image/png" , "image/jpg"})
+     */
+    private $image;
+
+    /**
      * @var array
      *
      * @ORM\Column(type="json")
      */
     private $roles = [];
+
+    /**
+     * @Assert\DateTime()
+     * @ORM\Column(type="datetime")
+     */
+    private $regDate;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="following")
+     */
+    private $followers;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="followers")
+     * @ORM\JoinTable(name="following",
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="following_user_id", referencedColumnName="id")
+     *     }
+     * )
+     */
+    private $following;
+
+
+    public function __construct()
+    {
+        $this->roles = array('ROLE_USER');
+        $this->followers = new ArrayCollection();
+        $this->following = new ArrayCollection();
+        $this->regDate = new \DateTime();
+    }
 
     public function getId(): ?int
     {
@@ -177,8 +226,64 @@ class User implements UserInterface, \Serializable
         [$this->id, $this->username, $this->password] = unserialize($serialized, ['allowed_classes' => false]);
     }
 
-    public function __construct()
+    public function getInfo(): ?string
     {
-        $this->roles = array('ROLE_USER');
+        return $this->info;
+    }
+
+    public function setInfo(?string $info): self
+    {
+        $this->info = $info;
+
+        return $this;
+    }
+
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    public function setImage($image)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function getregDate(): ?\DateTimeInterface
+    {
+        return $this->regDate;
+    }
+
+    public function setregDate(\DateTimeInterface $regDate): self
+    {
+        $this->regDate = $regDate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getFollowers()
+    {
+        return $this->followers;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getFollowing()
+    {
+        return $this->following;
+    }
+
+    public function follow(User $userToFollow)
+    {
+        if ($this->getFollowing()->contains($userToFollow)) {
+            return;
+        }
+
+        $this->getFollowing()->add($userToFollow);
     }
 }

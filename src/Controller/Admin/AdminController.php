@@ -24,7 +24,8 @@ class AdminController extends AbstractController
 {
     private $users,$posts,$comments,$tags;
 
-    public function __construct(UserRepository $users,
+    public function __construct(
+                                UserRepository $users,
                                 PostRepository $posts,
                                 CommentRepository $comments,
                                 TagRepository $tags)
