@@ -1,6 +1,6 @@
 <header class="main-header">
 
-    <a href="{{ path('admin_index') }}" class="logo">
+    <a href="{{ path('dashboard_index') }}" class="logo">
         <span class="logo-mini"><b>A</b>LT</span>
         <span class="logo-lg"><b>Admin</b>LTE</span>
     </a>
@@ -67,6 +67,7 @@
                         <span class="hidden-xs">{{ app.user.username }}</span>
                     </a>
                     <ul class="dropdown-menu">
+                    <ul class="dropdown-menu">
                         <li class="user-header">
                             <img src="{{ asset('/uploads/users_photos/' ~ app.user.getImage()) }}" class="img-circle"
                                  alt="User Image">
@@ -100,7 +101,7 @@
                 </li>
 
                 <li>
-                    <a href="#" data-toggle="control-sidebar"><i class="fa fa-home"></i></a>
+                    <a href="{{ path('homePage') }}"><i class="fa fa-home"></i></a>
                 </li>
             </ul>
         </div>

@@ -117,6 +117,26 @@ class User implements UserInterface, \Serializable
      */
     private $IsBlogger;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $facebook;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $Twitter;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $Pinterest;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $Instagram;
+
 
     public function __construct()
     {
@@ -319,6 +339,54 @@ class User implements UserInterface, \Serializable
     public function setIsBlogger(bool $IsBlogger): self
     {
         $this->IsBlogger = $IsBlogger;
+
+        return $this;
+    }
+
+    public function getFacebook(): ?string
+    {
+        return $this->facebook;
+    }
+
+    public function setFacebook(?string $facebook): self
+    {
+        $this->facebook = $facebook;
+
+        return $this;
+    }
+
+    public function getTwitter(): ?string
+    {
+        return $this->Twitter;
+    }
+
+    public function setTwitter(?string $Twitter): self
+    {
+        $this->Twitter = $Twitter;
+
+        return $this;
+    }
+
+    public function getPinterest(): ?string
+    {
+        return $this->Pinterest;
+    }
+
+    public function setPinterest(?string $Pinterest): self
+    {
+        $this->Pinterest = $Pinterest;
+
+        return $this;
+    }
+
+    public function getInstagram(): ?string
+    {
+        return $this->Instagram;
+    }
+
+    public function setInstagram(?string $Instagram): self
+    {
+        $this->Instagram = $Instagram;
 
         return $this;
     }

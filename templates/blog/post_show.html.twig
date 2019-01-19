@@ -54,7 +54,7 @@
                             {% if app.user.username != post.author.username %}
                                 {% if post.author.followers.contains(app.user) == false %}
                                     <form id="follow-form" action="{{ path('following_follow', {'id': post.author.id}) }}" method="post">
-                                        <button type="submit" id="follow-btn" class=" submit btn--danger btn--large full-width">Follow</button>
+                                        <button type="submit" id="follow-btn" class=" submit btn--primary btn--large full-width">Follow</button>
                                     </form>
                                 {% else %}
                                     <form id="follow-form" action="{{ path('following_unfollow', {'id': post.author.id }) }}" method="post">
@@ -67,10 +67,10 @@
                         <p>{{ post.author.info }} </p>
 
                         <ul class="s-content__author-social">
-                            <li><a href="#0">Facebook</a></li>
-                            <li><a href="#0">Twitter</a></li>
-                            <li><a href="#0">GooglePlus</a></li>
-                            <li><a href="#0">Instagram</a></li>
+                            <li><a href="{{ post.author.facebook }}">Facebook</a></li>
+                            <li><a href="{{ post.author.twitter }}">Twitter</a></li>
+                            <li><a href="{{ post.author.pinterest }}">Pinterest</a></li>
+                            <li><a href="{{ post.author.instagram }}">Instagram</a></li>
                         </ul>
                     </div>
                 </div>

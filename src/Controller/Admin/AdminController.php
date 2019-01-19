@@ -37,13 +37,13 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/", methods={"GET"}, name="admin_index")
+     * @Route("/", methods={"GET"}, name="dashboard_index")
      *
      * @return Response
      */
     public function index(): Response
     {
-        return $this->render('admin/admin.html.twig', [
+        return $this->render('dashboard/dashboard.html.twig', [
             'controller_name' => 'AdminController',
             'posts' => $this->posts->findAll(),
             'latestPosts' => $this->posts->findLatest(),
@@ -55,20 +55,19 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/blog", methods={"GET"}, name="admin_post_index")
+     * @Route("/posts", methods={"GET"}, name="dashboard_posts_index")
      *
      * @return Response
      */
 
     public function blog(): Response
     {
-        $authorPosts = $this->posts->findBy(['author' => $this->getUser()], ['publishedAt' => 'DESC']);
 
-        return $this->render('admin/blog/blog.html.twig', ['posts' => $authorPosts]);
+        return $this->render('dashboard/posts/posts.html.twig', ['posts' => $this->posts->findAll()]);
     }
 
     /**
-     * @Route("/new", methods={"GET", "POST"}, name="admin_post_new")
+     * @Route("/new", methods={"GET", "POST"}, name="dashboard_posts_new")
      *
      * @param Request $request
      *
@@ -95,34 +94,32 @@ class AdminController extends AbstractController
             $this->addFlash('success', 'post.created_successfully');
 
             if ($form->get('saveAndCreateNew')->isClicked()) {
-                return $this->redirectToRoute('admin_post_new');
+                return $this->redirectToRoute('dashboard_posts_new');
             }
 
-            return $this->redirectToRoute('admin_post_index');
+            return $this->redirectToRoute('dashboard_posts_index');
         }
 
-        return $this->render('admin/blog/new.html.twig', [
+        return $this->render('dashboard/posts/new.html.twig', [
             'post' => $post,
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/{username}/post/{id<\d+>}", methods={"GET"}, name="admin_post_show")
+     * @Route("/{username}/post/{id<\d+>}", methods={"GET"}, name="dashboard_posts_show")
      *
      * @return Response
      */
     public function show(Post $post): Response
     {
-        return $this->render('admin/blog/show.html.twig', [
+        return $this->render('dashboard/posts/show.html.twig', [
             'post' => $post,
         ]);
     }
 
     /**
-     * @Route("/{username}/post/{id<\d+>}/edit",methods={"GET", "POST"}, name="admin_post_edit")
-     * @IsGranted("edit", subject="post", message="Posts can only be edited by their authors.")
-     *
+     * @Route("/{username}/post/{id<\d+>}/edit",methods={"GET", "POST"}, name="dashboard_posts_edit")
      * @param Request $request
      *
      * @return Response
@@ -138,18 +135,17 @@ class AdminController extends AbstractController
 
             $this->addFlash('success', 'post.updated_successfully');
 
-            return $this->redirectToRoute('admin_post_edit', ['id' => $post->getId()]);
+            return $this->redirectToRoute('dashboard_posts_edit', ['id' => $post->getId()]);
         }
 
-        return $this->render('admin/blog/edit.html.twig', [
+        return $this->render('dashboard/posts/edit.html.twig', [
             'post' => $post,
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/{username}/post/{id}/delete", methods={"POST"}, name="admin_post_delete")
-     * @IsGranted("delete", subject="post")
+     * @Route("/{username}/post/{id}/delete", methods={"POST"}, name="dashboard_posts_delete")
      *
      * @param Request $request
      *
@@ -158,7 +154,7 @@ class AdminController extends AbstractController
     public function delete(Request $request, Post $post): Response
     {
         if (!$this->isCsrfTokenValid('delete', $request->request->get('token'))) {
-            return $this->redirectToRoute('admin_post_index');
+            return $this->redirectToRoute('dashboard_posts_index');
         }
 
         $post->getTags()->clear();
@@ -169,6 +165,6 @@ class AdminController extends AbstractController
 
         $this->addFlash('success', 'post.deleted_successfully');
 
-        return $this->redirectToRoute('admin_post_index');
+        return $this->redirectToRoute('dashboard_posts_index');
     }
 }

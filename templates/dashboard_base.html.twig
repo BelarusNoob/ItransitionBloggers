@@ -15,6 +15,8 @@
             <link rel="stylesheet" href="{{ asset('admin/css/AdminLTE.min.css') }}">
             <link rel="stylesheet" href="{{ asset('admin/css/_all-skins.min.css') }}">
 
+            <link rel="stylesheet" href="{{ asset('/admin/css/dataTables.min.css') }}">
+
         {% endblock %}
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -30,15 +32,15 @@
     <body id="{% block body_id %}{% endblock %}" class="hold-transition skin-blue sidebar-mini">
 
     <div class="wrapper">
-        {{ include('admin/dashboard_components/_dashboard_header.html.twig') }}
+        {{ include('dashboard/dashboard_components/_dashboard_header.html.twig') }}
 
-        {{ include('admin/dashboard_components/_dashboard_sidebar.html.twig') }}
+        {{ include('dashboard/dashboard_components/_dashboard_sidebar.html.twig') }}
         
         {% block body %}
 
         {% endblock %}
 
-        {{ include('admin/dashboard_components/_dashboard_footer.html.twig') }}
+        {{ include('dashboard/dashboard_components/_dashboard_footer.html.twig') }}
     </div>
 
     {% block javascripts %}
@@ -52,8 +54,25 @@
         <script src="{{ asset('admin/js/jquery.slimscroll.min.js') }}"></script>
         <script src="{{ asset('admin/js/Chart.js') }}"></script>
 
-        <script src="{{ asset('admin/js/dashboard2.js') }}"></script>
+
         <script src="{{ asset('admin/js/demo.js') }}"></script>
+
+        <script src="{{ asset('admin/js/jquery.dataTables.min.js') }}"></script>
+        <script src="{{ asset('admin/js/dataTables.min.js') }}"></script>
+
     {% endblock %}
+    <script>
+        $(function () {
+            $('#example1').DataTable()
+            $('#example2').DataTable({
+                'paging'      : true,
+                'lengthChange': false,
+                'searching'   : false,
+                'ordering'    : true,
+                'info'        : true,
+                'autoWidth'   : false
+            })
+        })
+    </script>
     </body>
 </html>
