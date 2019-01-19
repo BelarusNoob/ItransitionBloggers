@@ -12,6 +12,7 @@ use App\Utils\Slugger;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -145,6 +146,11 @@ class AdminController extends AbstractController
      */
     public function edit(Request $request, Post $post): Response
     {
+        if ($post->getImage()!=null) {
+            $post->setImage(
+                new File($this->getParameter('images_directory').'/'.$post->getImage()) );
+        }
+
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
 
@@ -171,13 +177,21 @@ class AdminController extends AbstractController
 
             $this->addFlash('success', 'post.updated_successfully');
 
-            return $this->redirectToRoute('dashboard_posts_edit', ['id' => $post->getId()]);
+            return $this->redirectToRoute('dashboard_posts_edit', ['username' => $post->getAuthor()->getUsername(), 'id' => $post->getId()]);
         }
 
         return $this->render('dashboard/posts/edit.html.twig', [
             'post' => $post,
             'form' => $form->createView(),
         ]);
+    }
+
+    public function updateAction(Request $request ,Post $posts)
+    {
+
+        $posts->setImage(
+            new File($this->getParameter('images_directory') . '/' . $posts->getImage()
+            ));
     }
 
     /**
