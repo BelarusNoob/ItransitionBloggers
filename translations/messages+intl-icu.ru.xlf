@@ -425,6 +425,107 @@
                 <source>rss.description</source>
                 <target>Самые последние записи, опубликованные в Symfony Demo блоге</target>
             </trans-unit>
+
+            
+            <trans-unit id="login">
+             <source>login</source>
+             <target>Логин</target>
+         </trans-unit>
+
+         <trans-unit id="register">
+             <source>register</source>
+             <target>Регистрация</target>
+         </trans-unit>
+
+         <trans-unit id="about">
+           <source>about</source>
+           <target>О нас</target>
+       </trans-unit>
+
+       <trans-unit id="popular">
+          <source>popular</source>
+          <target>Популярное</target>
+      </trans-unit>
+
+      <trans-unit id="all_posts">
+         <source>all_posts</source>
+         <target>Все посты</target>
+     </trans-unit>
+
+     <trans-unit id="preferences">
+          <source>preferences</source>
+          <target>Настройки</target>
+      </trans-unit>
+
+      <trans-unit id="menu">
+         <source>menu</source>
+         <target>Меню</target>
+     </trans-unit>
+
+     <trans-unit id="main_menu">
+         <source>main_menu</source>
+         <target>Мое меню</target>
+     </trans-unit>
+
+     <trans-unit id="my_profile">
+         <source>my_profile</source>
+         <target>Мой профиль</target>
+     </trans-unit>
+
+     <trans-unit id="logout">
+          <source>logout</source>
+          <target>Выйти</target>
+      </trans-unit>
+
+      <trans-unit id="close">
+         <source>close</source>
+         <target>Закрыть</target>
+     </trans-unit>
+
+     <trans-unit id="searh_for">
+         <source>search_for</source>
+         <target>Поиск:</target>
+     </trans-unit>
+
+     <trans-unit id="change_password">
+         <source>change_password</source>
+         <target>Изменить пароль</target>
+     </trans-unit>
+
+     <trans-unit id="change_password_errors">
+          <source>change_password_errors</source>
+          <target>Chenge password errors</target>
+      </trans-unit>
+
+      <trans-unit id="save">
+         <source>save</source>
+         <target>Сохранить</target>
+     </trans-unit>
+
+     <trans-unit id="edit_user">
+         <source>edit_user</source>
+         <target>Edit user</target>
+     </trans-unit>
+
+     <trans-unit id="username">
+         <source>username</source>
+         <target>Имя пользователя</target>
+     </trans-unit>
+
+     <trans-unit id="password">
+         <source>Password</source>
+         <target>Пароль</target>
+     </trans-unit>
+
+     <trans-unit id="to_register_you_need_to">
+         <source>to_register_you_need_to</source>
+         <target>To register you need to</target>
+     </trans-unit>
+
+     <trans-unit id="create_new_account">
+         <source>create_new_account</source>
+         <target>Создать новый аккаунт</target>
+     </trans-unit>
         </body>
     </file>
 </xliff>

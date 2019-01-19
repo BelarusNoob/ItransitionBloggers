@@ -83,45 +83,45 @@
 
                     <form role="search" method="get" class="header__search-form" action="#">
                         <label>
-                            <span class="hide-content">Search for:</span>
+                            <span class="hide-content">{% trans %}search_for{% endtrans %}</span>
                             <input type="search" class="search-field" placeholder="Type Keywords" value="" name="s" title="Search for:" autocomplete="off">
                         </label>
                         <input type="submit" class="search-submit" value="Search">
                     </form>
 
-                    <a href="#0" title="Close Search" class="header__overlay-close">Close</a>
+                    <a href="#0" title="Close Search" class="header__overlay-close">{% trans %}close{% endtrans %}</a>
 
                 </div>
 
 
-                <a class="header__toggle-menu" href="#0" title="Menu"><span>Menu</span></a>
+                <a class="header__toggle-menu" href="#0" title="Menu"><span>{% trans %}menu{% endtrans %}</span></a>
 
                 <nav class="header__nav-wrap">
 
-                    <h2 class="header__nav-heading h6">Main menu</h2>
+                    <h2 class="header__nav-heading h6">{% trans %}main_menu{% endtrans %}</h2>
 
                     <ul class="header__nav">
-                        <li class="current"><a href="{{ path('homePage') }}" title="">All posts</a></li>
-                        <li><a href="#" title="Popular">Popular</a></li>
+                        <li class="current"><a href="{{ path('homePage') }}" title="">{% trans %}all_posts{% endtrans %}</a></li>
+                        <li><a href="#" title="Popular">{% trans %}popular{% endtrans %}</a></li>
 
                         {% if is_granted(expression('not is_anonymous()')) %}
-                            <li><a href="#" title="">Preferences</a></li>
+                            <li><a href="#" title="">{% trans %}preferences{% endtrans %}</a></li>
                         {% endif %}
 
-                        <li><a href="{{ path('about') }}" title="">About</a></li>
+                        <li><a href="{{ path('about') }}" title="">{% trans %}about{% endtrans %}</a></li>
 
                         {% if is_granted(expression('is_anonymous()')) %}
-                            <li><a href="{{ path('login') }}" title="Login">Login</a></li>
-                            <li><a href="{{ path('userRegistration') }}" title="Register">Register</a></li>
+                            <li><a href="{{ path('login') }}" title="Login">{% trans %}login{% endtrans %}</a></li>
+                            <li><a href="{{ path('userRegistration') }}" title="Register">{% trans %}register{% endtrans %}</a></li>
                         {% endif %}
 
                         {% if is_granted(expression('not is_anonymous()')) %}
-                            <li><a href="{{ path('logout') }}" title="Logout">My Profile</a></li>
-                            <li><a href="{{ path('logout') }}" title="Logout">Logout</a></li>
+                            <li><a href="{{ path('logout') }}" title="Logout">{% trans %}my_profile{% endtrans %}</a></li>
+                            <li><a href="{{ path('logout') }}" title="Logout">{% trans %}logout{% endtrans %}</a></li>
                         {% endif %}
                     </ul>
 
-                    <a href="#0" title="Close Menu" class="header__overlay-close close-mobile-menu">Close</a>
+                    <a href="#0" title="Close Menu" class="header__overlay-close close-mobile-menu">{% trans %}close{% endtrans %}</a>
 
                 </nav>
 

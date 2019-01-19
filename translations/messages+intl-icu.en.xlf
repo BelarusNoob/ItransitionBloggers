@@ -425,6 +425,107 @@
                 <source>rss.description</source>
                 <target>Most recent posts published on the Symfony Demo blog</target>
             </trans-unit>
-        </body>
-    </file>
+
+            <trans-unit id="login">
+             <source>login</source>
+             <target>Login</target>
+         </trans-unit>
+
+         <trans-unit id="register">
+             <source>register</source>
+             <target>Register</target>
+         </trans-unit>
+
+         <trans-unit id="about">
+           <source>about</source>
+           <target>About</target>
+       </trans-unit>
+
+       <trans-unit id="popular">
+          <source>popular</source>
+          <target>Popular</target>
+      </trans-unit>
+
+      <trans-unit id="all_posts">
+         <source>all_posts</source>
+         <target>All posts</target>
+     </trans-unit>
+
+     <trans-unit id="preferences">
+          <source>preferences</source>
+          <target>Preferences</target>
+      </trans-unit>
+
+      <trans-unit id="menu">
+         <source>menu</source>
+         <target>Menu</target>
+     </trans-unit>
+
+     <trans-unit id="main_menu">
+         <source>main_menu</source>
+         <target>Main menu</target>
+     </trans-unit>
+
+     <trans-unit id="my_profile">
+         <source>my_profile</source>
+         <target>My profile</target>
+     </trans-unit>
+
+     <trans-unit id="logout">
+          <source>logout</source>
+          <target>Logout</target>
+      </trans-unit>
+
+      <trans-unit id="close">
+         <source>close</source>
+         <target>Close</target>
+     </trans-unit>
+
+     <trans-unit id="searh_for">
+         <source>search_for</source>
+         <target>Search for:</target>
+     </trans-unit>
+
+     <trans-unit id="change_password">
+         <source>change_password</source>
+         <target>Change password</target>
+     </trans-unit>
+
+     <trans-unit id="change_password_errors">
+          <source>change_password_errors</source>
+          <target>Change password errors</target>
+      </trans-unit>
+
+      <trans-unit id="save">
+         <source>save</source>
+         <target>Save</target>
+     </trans-unit>
+
+     <trans-unit id="edit_user">
+         <source>edit_user</source>
+         <target>Edit user</target>
+     </trans-unit>
+
+     <trans-unit id="username">
+         <source>username</source>
+         <target>Username</target>
+     </trans-unit>
+
+     <trans-unit id="password">
+         <source>Password</source>
+         <target>Password</target>
+     </trans-unit>
+
+     <trans-unit id="to_register_you_need_to">
+         <source>to_register_you_need</source>
+         <target>To register you need</target>
+     </trans-unit>
+
+     <trans-unit id="create_new_account">
+         <source>create_new_account</source>
+         <target>Create new account</target>
+     </trans-unit>
+
+ </body>
+</file>
 </xliff>
