@@ -3,24 +3,63 @@
 {% block body_id 'dashboard_posts_edit' %}
 
 {% block body %}
-    <h1>{{ 'title.edit_post'|trans({'%id%': post.id}) }}</h1>
 
-    {{ include('dashboard/posts/_form.html.twig', {
-        form: form,
-        button_label: 'action.save'|trans,
-        include_back_to_home_link: true,
-    }, with_context = false) }}
-{% endblock %}
-
-{% block sidebar %}
-    <div class="section">
-        <a href="{{ path('dashboard_posts_show', {id: post.id}) }}" class="btn btn-lg btn-block btn-success">
-            <i class="fa fa-eye" aria-hidden="true"></i> {{ 'action.show_post'|trans }}
-        </a>
+    <div class="content-wrapper">
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">{{ 'title.post_edit'|trans }}</h3>
+                        </div>
+                        {{ form_start(form) }}
+                        <div class="box-body">
+                            <div class="form-group">
+                                {{ form_errors(form.title) }}
+                                <div class="col-sm-12">
+                                    {{ form_label(form.title) }}
+                                    {{ form_widget(form.title, { 'attr': {'class': 'form-control'} }) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                {{ form_errors(form.summary) }}
+                                <div class="col-sm-12">
+                                    {{ form_label(form.summary) }}
+                                    {{ form_widget(form.summary, { 'attr': {'class': 'form-control'} }) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                {{ form_errors(form.content) }}
+                                <div class="col-sm-12">
+                                    {{ form_label(form.content) }}
+                                    {{ form_widget(form.content, { 'attr': {'class': 'form-control'} }) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                {{ form_errors(form.tags) }}
+                                <div class="col-sm-12">
+                                    {{ form_label(form.tags) }}
+                                    {{ form_widget(form.tags, { 'attr': {'class': 'form-control'} }) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    {{ form_row(form.image) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-footer">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa fa-save" aria-hidden="true"></i> {{ 'label.edit_post'|trans }}
+                            </button>
+                            <a href="{{ path('dashboard_posts_index') }}" class="btn btn-link">
+                                <i class="fa fa-list-alt" aria-hidden="true"></i> {{ 'action.back_to_list'|trans }}
+                            </a>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
-
-    <div class="section actions">
-        {{ include('dashboard/posts/_delete_form.html.twig', {'username': post.author.username, 'id': post.id}, with_context = false) }}
-    </div>
-
 {% endblock %}

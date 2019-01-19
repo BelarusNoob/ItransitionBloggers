@@ -48,6 +48,10 @@
 
 .actions-line {
     display: inline-block;
-
 }
+
+.section-actions {
+    margin-left: 5px;
+}
+
 

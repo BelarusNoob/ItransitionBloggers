@@ -21,6 +21,11 @@
                     <div class="box">
                         <div class="box-header">
                             <h3 class="box-title">Posts</h3>
+                            <div class="section-actions actions-line">
+                                <a href="{{ path('dashboard_posts_new') }}" class="btn btn-xs btn-success">
+                                    <i class="fa fa-plus" aria-hidden="true"></i> {{ 'action.create_post'|trans }}
+                                </a>
+                            </div>
                         </div>
                         <div class="box-body">
                             <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
@@ -70,7 +75,7 @@
                                                         {% endfor %}
                                                     </td>
                                                     <td class="text-center">
-                                                            <a href="{{ path('dashboard_posts_show', {'username': post.author.username, 'id': post.id}) }}" class="btn btn-sm btn-default actions-line">
+                                                            <a href="{{ path('blog_post', {'username': post.author.username, 'slug': post.slug}) }}" class="btn btn-sm btn-default actions-line">
                                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                                             </a>
 
@@ -99,12 +104,6 @@
                                     </div>
                                 </div>
 
-                            </div>
-
-                            <div class="section actions">
-                                <a href="{{ path('dashboard_posts_new') }}" class="btn btn-lg btn-block btn-success">
-                                    <i class="fa fa-plus" aria-hidden="true"></i> {{ 'action.create_post'|trans }}
-                                </a>
                             </div>
                         </div><!-- /.box-body -->
                     </div>

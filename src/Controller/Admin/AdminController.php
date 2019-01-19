@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 /**
  * @Route("/dashboard")
@@ -78,7 +79,6 @@ class AdminController extends AbstractController
         $post = new Post();
         $post->setAuthor($this->getUser());
 
-        // See https://symfony.com/doc/current/book/forms.html#submitting-forms-with-multiple-buttons
         $form = $this->createForm(PostType::class, $post)
             ->add('saveAndCreateNew', SubmitType::class);
 
@@ -86,6 +86,20 @@ class AdminController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $post->setSlug(Slugger::slugify($post->getTitle()));
+
+            $file = $post->getImage();
+
+            $fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
+
+            try {
+                $file->move(
+                    $this->getParameter('images_directory'),
+                    $fileName
+                );
+            } catch (FileException $e) {
+            }
+
+            $post->setImage($fileName);
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($post);
@@ -104,6 +118,11 @@ class AdminController extends AbstractController
             'post' => $post,
             'form' => $form->createView(),
         ]);
+    }
+
+    private function generateUniqueFileName()
+    {
+        return md5(uniqid());
     }
 
     /**
@@ -131,7 +150,24 @@ class AdminController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $post->setSlug(Slugger::slugify($post->getTitle()));
-            $this->getDoctrine()->getManager()->flush();
+
+            $file = $post->getImage();
+
+            $fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
+
+            try {
+                $file->move(
+                    $this->getParameter('images_directory'),
+                    $fileName
+                );
+            } catch (FileException $e) {
+            }
+
+            $post->setImage($fileName);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($post);
+            $em->flush();
 
             $this->addFlash('success', 'post.updated_successfully');
 

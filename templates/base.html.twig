@@ -116,7 +116,7 @@
                         {% endif %}
 
                         {% if is_granted('ROLE_ADMIN', expression('not is_anonymous()')) %}
-                            <li><a href="{{ path('admin_index') }}" title="Logout">Admin Dashboard</a></li>
+                            <li><a href="{{ path('dashboard_index') }}" title="Logout">Admin Dashboard</a></li>
                         {% endif %}
 
                         {% if is_granted(expression('not is_anonymous()')) %}

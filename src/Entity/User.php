@@ -71,7 +71,7 @@ class User implements UserInterface, \Serializable
     /**
      * @ORM\Column(type="string")
      *
-     * @Assert\NotBlank(message="Please, upload the product brochure as a PNG/JPG/JPEG file.")
+     * @Assert\NotBlank(message="Please, upload the profile image as a PNG/JPG/JPEG file.")
      * @Assert\File(mimeTypes={ "image/jpeg", "image/png" , "image/jpg"})
      */
     private $image;

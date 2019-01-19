@@ -95,6 +95,14 @@ class Post
      */
     private $tags;
 
+    /**
+     * @ORM\Column(type="string")
+     *
+     * @Assert\NotBlank(message="Please, upload the picture as a PNG/JPG/JPEG file.")
+     * @Assert\File(mimeTypes={ "image/jpeg", "image/png" , "image/jpg"})
+     */
+    private $image;
+
     public function __construct()
     {
         $this->publishedAt = new \DateTime();
@@ -203,5 +211,17 @@ class Post
     public function getTags(): Collection
     {
         return $this->tags;
+    }
+
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    public function setImage($image)
+    {
+        $this->image = $image;
+
+        return $this;
     }
 }
