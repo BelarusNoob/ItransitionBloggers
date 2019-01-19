@@ -54,7 +54,7 @@
                                                     aria-label="CSS grade: activate to sort column ascending"
                                                     style="width: 109px;">{{ 'label.tags'|trans }}
                                                 </th>
-                                                <th scope="col">{{ 'label.actions'|trans }}</th>
+                                                <th scope="col">{{ 'label.actions_buttons'|trans }}</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -69,16 +69,15 @@
                                                             {{ tag.name }}
                                                         {% endfor %}
                                                     </td>
-                                                    <td class="text-right">
-                                                        <div class="item-actions">
-                                                            <a href="{{ path('dashboard_posts_show', {'username': post.author.username, 'id': post.id}) }}" class="btn btn-sm btn-default">
-                                                                <i class="fa fa-eye" aria-hidden="true"></i> {{ 'action.show'|trans }}
+                                                    <td class="text-center">
+                                                            <a href="{{ path('dashboard_posts_show', {'username': post.author.username, 'id': post.id}) }}" class="btn btn-sm btn-default actions-line">
+                                                                <i class="fa fa-eye" aria-hidden="true"></i>
                                                             </a>
 
-                                                            <a href="{{ path('dashboard_posts_edit', {'username': post.author.username, 'id': post.id}) }}" class="btn btn-sm btn-primary">
-                                                                <i class="fa fa-edit" aria-hidden="true"></i> {{ 'action.edit'|trans }}
+                                                            <a href="{{ path('dashboard_posts_edit', {'username': post.author.username, 'id': post.id}) }}" class="btn btn-sm btn-primary actions-line">
+                                                                <i class="fa fa-edit" aria-hidden="true"></i>
                                                             </a>
-                                                        </div>
+                                                            {{ include('dashboard/posts/_delete_form.html.twig', {'username': post.author.username, 'id': post.id}) }}
                                                     </td>
                                                 </tr>
                                             {% else %}

@@ -149,6 +149,8 @@ class AdminController extends AbstractController
      *
      * @param Request $request
      *
+     * @param Post $post
+     *
      * @return Response
      */
     public function delete(Request $request, Post $post): Response
