@@ -4,8 +4,11 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Form\UserType1;
+use App\Repository\PostRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\UserRepository;
@@ -17,20 +20,24 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  */
 class UserController extends AbstractController
 {
-    private $passwordEncoder;
+    private $passwordEncoder, $userRepository,  $postRepository;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder,
+                                UserRepository $userRepository,
+                                PostRepository $postRepository)
     {
         $this->passwordEncoder = $passwordEncoder;
+        $this->userRepository = $userRepository;
+        $this->postRepository = $postRepository;
     }
 
     /**
      * @Route("/", name="user_index", methods={"GET"})
      */
-    public function index(UserRepository $userRepository): Response
+    public function index(): Response
     {
         return $this->render('user/index.html.twig', [
-            'users' => $userRepository->findAll(),
+            'users' => $this->userRepository->findAll(),
         ]);
     }
 
@@ -85,14 +92,28 @@ class UserController extends AbstractController
 
 
     /**
-     * @Route("/{username}", name="user_profile", methods={"GET"})
+     * @Route("/{username}", name="user_profile", methods={"GET","POST"})
      */
-    public function show(User $user): Response
+    public function show(Request $request, User $user): Response
     {
+        $form = $this->createForm(UserType1::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('user_profile', [
+                'username' => $user->getUsername(),
+            ]);
+        }
+
         return $this->render('user_profile/profile.html.twig', [
             'user' => $user,
             'followers' => $this->getUser()->getFollowers(),
             'following' => $this->getUser()->getFollowing(),
+            'userPosts' => $this->getUser()->getPosts(),
+            'form' => $form->createView(),
         ]);
     }
 
