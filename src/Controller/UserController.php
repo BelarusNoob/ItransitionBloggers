@@ -85,12 +85,14 @@ class UserController extends AbstractController
 
 
     /**
-     * @Route("/{id}", name="user_show", methods={"GET"})
+     * @Route("/{username}", name="user_profile", methods={"GET"})
      */
     public function show(User $user): Response
     {
-        return $this->render('user/show.html.twig', [
+        return $this->render('user_profile/profile.html.twig', [
             'user' => $user,
+            'followers' => $this->getUser()->getFollowers(),
+            'following' => $this->getUser()->getFollowing(),
         ]);
     }
 
