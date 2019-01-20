@@ -14,21 +14,22 @@
                 </h1>
                 <ul class="s-content__header-meta">
                     <li class="date">{{ post.publishedAt|date('M d, Y') }}</li>
-                    <li class="cat">In
+                    {% if post.tags|length != 0 %}
+                        <li class="cat">In
 
-                        {% for tag in post.tags %}
-                            <a href="{{ path('homePage', {'tag': tag.name == app.request.query.get('tag') ? null : tag.name}) }}">
-                                {{ tag.name }}
-                            </a>
-                        {% endfor %}
-
-                    </li>
+                            {% for tag in post.tags %}
+                                <a href="{{ path('homePage', {'tag': tag.name == app.request.query.get('tag') ? null : tag.name}) }}">
+                                    {{ tag.name }}
+                                </a>
+                            {% endfor %}
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
 
             <div class="s-content__media col-full">
                 <div class="s-content__post-thumb">
-                    <img src="{{ asset('images/thumbs/single/standard/standard-1000.jpg') }}"
+                    <img src="{{ asset('/uploads/users_photos/' ~ post.getImage()) }}"
                          sizes="(max-width: 2000px) 100vw, 2000px" alt="" >
                 </div>
             </div>
@@ -46,21 +47,31 @@
                 </p>
 
                 <div class="s-content__author">
-                    <img src="{{ asset('images/avatars/user-03.jpg') }}" alt="">
+                    <img src="{{ asset('/uploads/users_photos/' ~ post.author.getImage()) }}" alt="">
 
                     <div class="s-content__author-about">
                         <h4 class="s-content__author-name">
                             <a href="#0">{{ post.author.firstName }} {{ post.author.lastName }}</a>
+                            {% if app.user.username != post.author.username %}
+                                {% if post.author.followers.contains(app.user) == false %}
+                                    <form id="follow-form" action="{{ path('following_follow', {'id': post.author.id}) }}" method="post">
+                                        <button type="submit" id="follow-btn" class=" submit btn--primary btn--large full-width">Follow</button>
+                                    </form>
+                                {% else %}
+                                    <form id="follow-form" action="{{ path('following_unfollow', {'id': post.author.id }) }}" method="post">
+                                        <button type="submit" id="follow-btn" class=" submit btn--danger btn--large full-width">Unfollow</button>
+                                    </form>
+                                {% endif %}
+                            {% endif %}
                         </h4>
 
-                        <p>Alias aperiam at debitis deserunt dignissimos dolorem doloribus, fuga fugiat impedit laudantium magni maxime nihil nisi quidem quisquam sed ullam voluptas voluptatum. Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                        </p>
+                        <p>{{ post.author.info }} </p>
 
                         <ul class="s-content__author-social">
-                            <li><a href="#0">Facebook</a></li>
-                            <li><a href="#0">Twitter</a></li>
-                            <li><a href="#0">GooglePlus</a></li>
-                            <li><a href="#0">Instagram</a></li>
+                            <li><a href="{{ post.author.facebook }}">Facebook</a></li>
+                            <li><a href="{{ post.author.twitter }}">Twitter</a></li>
+                            <li><a href="{{ post.author.pinterest }}">Pinterest</a></li>
+                            <li><a href="{{ post.author.instagram }}">Instagram</a></li>
                         </ul>
                     </div>
                 </div>
@@ -70,9 +81,9 @@
         </article>
 
         {% block sidebar %}
-            {% if is_granted(['ROLE_ADMIN', 'ROLE_MODERATOR']) %}
+            {% if is_granted(['ROLE_ADMIN', 'ROLE_MODERATOR', 'ROLE_BLOGGER']) %}
                 <div class="section">
-                    <a class="btn btn-lg btn-block btn-success" href="{{ path('admin_post_edit', {id: post.id}) }}">
+                    <a class="btn btn-lg btn-block btn-success" href="{{ path('dashboard_posts_edit', {'username': post.author.username, 'id': post.id} ) }}">
                         <i class="fa fa-edit" aria-hidden="true"></i> {{ 'action.edit_post'|trans }}
                     </a>
                 </div>

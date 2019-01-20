@@ -2,8 +2,6 @@
 
 namespace App\Controller;
 
-namespace App\Controller;
-
 use App\Entity\Comment;
 use App\Entity\Post;
 use App\Entity\Tag;
@@ -26,15 +24,13 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class BlogController extends AbstractController
 {
-    private $eventDispatcher;
-    private $posts;
-    private $tags;
+    private $eventDispatcher, $posts, $tags;
 
     public function __construct(EventDispatcherInterface $eventDispatcher, PostRepository $posts, TagRepository $tags)
     {
-        $this->eventDispatcher=$eventDispatcher;
-        $this->posts=$posts;
-        $this->tags=$tags;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->posts = $posts;
+        $this->tags = $tags;
     }
 
     /**

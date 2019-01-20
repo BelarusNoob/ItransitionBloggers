@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class SecurityController extends AbstractController
 {
@@ -43,6 +44,26 @@ class SecurityController extends AbstractController
                 )
             );
 
+            $file = $user->getImage();
+
+            $fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
+
+            try {
+                $file->move(
+                    $this->getParameter('images_directory'),
+                    $fileName
+                );
+            } catch (FileException $e) {
+            }
+
+            $user->setImage($fileName);
+
+            if ($form->get('IsBlogger')->getData()==true)
+            {
+                $user->setRoles(
+                    ['ROLE_BLOGGER']
+                );
+            }
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
@@ -57,6 +78,12 @@ class SecurityController extends AbstractController
             'registrationForm' => $form->createView(),
         ]);
     }
+
+    private function generateUniqueFileName()
+    {
+        return md5(uniqid());
+    }
+
 
     /**
      * @Route("/login", name="login")

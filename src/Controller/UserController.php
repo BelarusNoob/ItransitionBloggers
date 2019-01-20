@@ -2,48 +2,135 @@
 
 namespace App\Controller;
 
-use App\Form\Type\ChangePasswordType;
+use App\Entity\User;
 use App\Form\UserType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use App\Form\UserType1;
+use App\Repository\PostRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\UserRepository;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
- * @Route("/profile")
- * @IsGranted("ROLE_USER")
+ * @Route("/user")
  */
 class UserController extends AbstractController
 {
-    private $encoder;
+    private $passwordEncoder, $userRepository,  $postRepository;
 
-    public function __construct(UserPasswordEncoderInterface $encoder)
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder,
+                                UserRepository $userRepository,
+                                PostRepository $postRepository)
     {
-        $this->encoder=$encoder;
+        $this->passwordEncoder = $passwordEncoder;
+        $this->userRepository = $userRepository;
+        $this->postRepository = $postRepository;
     }
 
     /**
-     * @Route("/edit", methods={"GET", "POST"}, name="user_edit")
-     *
-     * @param Request $request
-     *
-     * @return Response
+     * @Route("/", name="user_index", methods={"GET"})
      */
-    public function edit(Request $request): Response
+    public function index(): Response
     {
-        $user = $this->getUser();
+        return $this->render('user/index.html.twig', [
+            'users' => $this->userRepository->findAll(),
+        ]);
+    }
 
+    /**
+     * @Route("/new", name="user_new", methods={"GET","POST"})
+     */
+    public function new(Request $request): Response
+    {
+        $user = new User();
+        $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword(
+                $this->passwordEncoder->encodePassword(
+                    $user,
+                    $form->get('plainPassword')->getData()
+                )
+            );
+
+            $file = $user->getImage();
+
+            $fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
+
+            try {
+                $file->move(
+                    $this->getParameter('images_directory'),
+                    $fileName
+                );
+            } catch (FileException $e) {
+            }
+
+            $user->setImage($fileName);
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('user_index');
+        }
+
+        return $this->render('user/new.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    private function generateUniqueFileName()
+    {
+        return md5(uniqid());
+    }
+
+
+    /**
+     * @Route("/{username}", name="user_profile", methods={"GET","POST"})
+     */
+    public function show(Request $request, User $user): Response
+    {
+        $form = $this->createForm(UserType1::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('user_profile', [
+                'username' => $user->getUsername(),
+            ]);
+        }
+
+        return $this->render('user_profile/profile.html.twig', [
+            'user' => $user,
+            'followers' => $this->getUser()->getFollowers(),
+            'following' => $this->getUser()->getFollowing(),
+            'userPosts' => $this->getUser()->getPosts(),
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/edit", name="user_edit", methods={"GET","POST"})
+     */
+    public function edit(Request $request, User $user): Response
+    {
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            $this->addFlash('success', 'user.updated_successfully');
-
-            return $this->redirectToRoute('user_edit');
+            return $this->redirectToRoute('user_index', [
+                'id' => $user->getId(),
+            ]);
         }
 
         return $this->render('user/edit.html.twig', [
@@ -53,29 +140,16 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/change-password", methods={"GET", "POST"}, name="user_change_password")
-     *
-     * @param Request $request
-     *
-     * @return Response
+     * @Route("/{id}", name="user_delete", methods={"DELETE"})
      */
-    public function changePassword(Request $request): Response
+    public function delete(Request $request, User $user): Response
     {
-        $user = $this->getUser();
-
-        $form = $this->createForm(ChangePasswordType::class);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $user->setPassword($this->encoder->encodePassword($user, $form->get('newPassword')->getData()));
-
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('logout');
+        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($user);
+            $entityManager->flush();
         }
 
-        return $this->render('user/change_password.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        return $this->redirectToRoute('user_index');
     }
 }

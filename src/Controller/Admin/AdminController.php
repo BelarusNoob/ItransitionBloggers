@@ -4,50 +4,73 @@ namespace App\Controller\Admin;
 
 use App\Entity\Post;
 use App\Form\PostType;
+use App\Repository\CommentRepository;
 use App\Repository\PostRepository;
+use App\Repository\TagRepository;
+use App\Repository\UserRepository;
 use App\Utils\Slugger;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 /**
  * @Route("/dashboard")
  * @IsGranted("ROLE_ADMIN")
  */
-
 class AdminController extends AbstractController
 {
-    /**
-     * @Route("/dashboard/admin/", name="dashboard_admin")
-     */
-    public function admin()
+    private $users,$posts,$comments,$tags;
+
+    public function __construct(
+                                UserRepository $users,
+                                PostRepository $posts,
+                                CommentRepository $comments,
+                                TagRepository $tags)
     {
-        return $this->render('admin/admin.html.twig', [
+        $this->users=$users;
+        $this->posts=$posts;
+        $this->comments=$comments;
+        $this->tags=$tags;
+    }
+
+    /**
+     * @Route("/", methods={"GET"}, name="dashboard_index")
+     *
+     * @return Response
+     */
+    public function index(): Response
+    {
+        return $this->render('dashboard/dashboard.html.twig', [
             'controller_name' => 'AdminController',
+            'posts' => $this->posts->findAll(),
+            'latestPosts' => $this->posts->findLatest(),
+            'comments' => $this->comments->findAll(),
+            'latestComments' => $this->comments->findLatest(),
+            'users' => $this->users->findAll(),
+            'latestUsers' => $this->users->findLatest(),
+            'tags' => $this->tags->findAll()
         ]);
     }
 
     /**
-     * @Route("/", methods={"GET"}, name="admin_index")
-     * @Route("/", methods={"GET"}, name="admin_post_index")
-     *
-     * @param PostRepository $posts
+     * @Route("/posts", methods={"GET"}, name="dashboard_posts_index")
      *
      * @return Response
      */
 
-    public function index(PostRepository $posts): Response
+    public function blog(): Response
     {
-        $authorPosts = $posts->findBy(['author' => $this->getUser()], ['publishedAt' => 'DESC']);
 
-        return $this->render('admin/blog/index.html.twig', ['posts' => $authorPosts]);
+        return $this->render('dashboard/posts/posts.html.twig', ['posts' => $this->posts->findAll()]);
     }
 
     /**
-     * @Route("/new", methods={"GET", "POST"}, name="admin_post_new")
+     * @Route("/new", methods={"GET", "POST"}, name="dashboard_posts_new")
      *
      * @param Request $request
      *
@@ -58,7 +81,6 @@ class AdminController extends AbstractController
         $post = new Post();
         $post->setAuthor($this->getUser());
 
-        // See https://symfony.com/doc/current/book/forms.html#submitting-forms-with-multiple-buttons
         $form = $this->createForm(PostType::class, $post)
             ->add('saveAndCreateNew', SubmitType::class);
 
@@ -67,6 +89,20 @@ class AdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $post->setSlug(Slugger::slugify($post->getTitle()));
 
+            $file = $post->getImage();
+
+            $fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
+
+            try {
+                $file->move(
+                    $this->getParameter('images_directory'),
+                    $fileName
+                );
+            } catch (FileException $e) {
+            }
+
+            $post->setImage($fileName);
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($post);
             $em->flush();
@@ -74,68 +110,103 @@ class AdminController extends AbstractController
             $this->addFlash('success', 'post.created_successfully');
 
             if ($form->get('saveAndCreateNew')->isClicked()) {
-                return $this->redirectToRoute('admin_post_new');
+                return $this->redirectToRoute('dashboard_posts_new');
             }
 
-            return $this->redirectToRoute('admin_post_index');
+            return $this->redirectToRoute('dashboard_posts_index');
         }
 
-        return $this->render('admin/blog/new.html.twig', [
+        return $this->render('dashboard/posts/new.html.twig', [
             'post' => $post,
             'form' => $form->createView(),
         ]);
     }
 
+    private function generateUniqueFileName()
+    {
+        return md5(uniqid());
+    }
+
     /**
-     * Finds and displays a Post entity.
+     * @Route("/{username}/post/{id<\d+>}", methods={"GET"}, name="dashboard_posts_show")
      *
-     * @Route("/{id<\d+>}", methods={"GET"}, name="admin_post_show")
+     * @return Response
      */
     public function show(Post $post): Response
     {
-        $this->denyAccessUnlessGranted('show', $post, 'Posts can only be shown to their authors.');
-
-        return $this->render('admin/blog/show.html.twig', [
+        return $this->render('dashboard/posts/show.html.twig', [
             'post' => $post,
         ]);
     }
 
     /**
-     * Displays a form to edit an existing Post entity.
+     * @Route("/{username}/post/{id<\d+>}/edit",methods={"GET", "POST"}, name="dashboard_posts_edit")
+     * @param Request $request
      *
-     * @Route("/{id<\d+>}/edit",methods={"GET", "POST"}, name="admin_post_edit")
-     * @IsGranted("edit", subject="post", message="Posts can only be edited by their authors.")
+     * @return Response
      */
     public function edit(Request $request, Post $post): Response
     {
+        $post->setImage(
+            new File($this->getParameter('images_directory').'/'.'default.jpg')
+        );
+
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $post->setSlug(Slugger::slugify($post->getTitle()));
-            $this->getDoctrine()->getManager()->flush();
+
+            $file = $post->getImage();
+
+            $fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
+
+            try {
+                $file->move(
+                    $this->getParameter('images_directory'),
+                    $fileName
+                );
+            } catch (FileException $e) {
+            }
+
+            $post->setImage($fileName);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($post);
+            $em->flush();
 
             $this->addFlash('success', 'post.updated_successfully');
 
-            return $this->redirectToRoute('admin_post_edit', ['id' => $post->getId()]);
+            return $this->redirectToRoute('dashboard_posts_edit', ['username' => $post->getAuthor()->getUsername(), 'id' => $post->getId()]);
         }
 
-        return $this->render('admin/blog/edit.html.twig', [
+        return $this->render('dashboard/posts/edit.html.twig', [
             'post' => $post,
             'form' => $form->createView(),
         ]);
     }
 
+    public function updateAction(Request $request ,Post $posts)
+    {
+
+        $posts->setImage(
+            new File($this->getParameter('images_directory') . '/' . $posts->getImage()
+            ));
+    }
+
     /**
-     * Deletes a Post entity.
+     * @Route("/{username}/post/{id}/delete", methods={"POST"}, name="dashboard_posts_delete")
      *
-     * @Route("/{id}/delete", methods={"POST"}, name="admin_post_delete")
-     * @IsGranted("delete", subject="post")
+     * @param Request $request
+     *
+     * @param Post $post
+     *
+     * @return Response
      */
     public function delete(Request $request, Post $post): Response
     {
         if (!$this->isCsrfTokenValid('delete', $request->request->get('token'))) {
-            return $this->redirectToRoute('admin_post_index');
+            return $this->redirectToRoute('dashboard_posts_index');
         }
 
         $post->getTags()->clear();
@@ -146,6 +217,6 @@ class AdminController extends AbstractController
 
         $this->addFlash('success', 'post.deleted_successfully');
 
-        return $this->redirectToRoute('admin_post_index');
+        return $this->redirectToRoute('dashboard_posts_index');
     }
 }

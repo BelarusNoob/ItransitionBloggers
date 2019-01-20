@@ -1,0 +1,117 @@
+{% extends 'dashboard_base.html.twig' %}
+
+{% block body_id 'dashboard_posts_index' %}
+
+{% block body %}
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>
+                Dashboard
+                <small>Version 1.0</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="{{ path('dashboard_index') }}"><i class="fa fa-dashboard"></i>Home</a></li>
+                <li class="active">Posts</li>
+            </ol>
+        </section>
+
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header">
+                            <h3 class="box-title">Posts</h3>
+                            <div class="section-actions actions-line">
+                                <a href="{{ path('dashboard_posts_new') }}" class="btn btn-xs btn-success">
+                                    <i class="fa fa-plus" aria-hidden="true"></i> {{ 'action.create_post'|trans }}
+                                </a>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <table id="example1" class="table table-bordered table-striped dataTable"
+                                               role="grid" aria-describedby="example1_info">
+                                            <thead>
+                                            <tr role="row">
+                                                <th class="sorting_asc" tabindex="0" aria-controls="example1"
+                                                    rowspan="1" colspan="1" aria-sort="ascending"
+                                                    aria-label="Rendering engine: activate to sort column descending"
+                                                    style="width: 177px;">{{ 'label.id'|trans }}
+                                                </th>
+                                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                                    colspan="1" aria-label="Browser: activate to sort column ascending"
+                                                    style="width: 218px;">{{ 'label.title'|trans }}
+                                                </th>
+                                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                                    colspan="1"
+                                                    aria-label="Platform(s): activate to sort column ascending"
+                                                    style="width: 194px;">{{ 'label.published_at'|trans }}
+                                                </th>
+                                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                                    colspan="1"
+                                                    aria-label="Engine version: activate to sort column ascending"
+                                                    style="width: 152px;">{{ 'label.author'|trans }}
+                                                </th>
+                                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                                    colspan="1"
+                                                    aria-label="CSS grade: activate to sort column ascending"
+                                                    style="width: 109px;">{{ 'label.tags'|trans }}
+                                                </th>
+                                                <th scope="col">{{ 'label.actions_buttons'|trans }}</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for post in posts %}
+                                                <tr>
+                                                    <td>{{ post.id }}</td>
+                                                    <td>{{ post.title }}</td>
+                                                    <td>{{ post.publishedAt|date ('s:i:h d-m-Y') }}</td>
+                                                    <td>{{ post.author.username }}</td>
+                                                    <td>
+                                                        {% for tag in post.tags %}
+                                                            {{ tag.name }}
+                                                        {% endfor %}
+                                                    </td>
+                                                    <td class="text-center">
+                                                            <a href="{{ path('blog_post', {'username': post.author.username, 'slug': post.slug}) }}" class="btn btn-sm btn-default actions-line">
+                                                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                                            </a>
+
+                                                            <a href="{{ path('dashboard_posts_edit', {'username': post.author.username, 'id': post.id}) }}" class="btn btn-sm btn-primary actions-line">
+                                                                <i class="fa fa-edit" aria-hidden="true"></i>
+                                                            </a>
+                                                            {{ include('dashboard/posts/_delete_form.html.twig', {'username': post.author.username, 'id': post.id}) }}
+                                                    </td>
+                                                </tr>
+                                            {% else %}
+                                                <tr>
+                                                    <td colspan="4" align="center">{{ 'post.no_posts_found'|trans }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                            <tfoot>
+                                            <tr>
+                                                <th rowspan="1" colspan="1">{{ 'label.id'|trans }}</th>
+                                                <th rowspan="1" colspan="1">{{ 'label.title'|trans }}</th>
+                                                <th rowspan="1" colspan="1">{{ 'label.published_at'|trans }}</th>
+                                                <th rowspan="1" colspan="1">{{ 'label.author'|trans }}</th>
+                                                <th rowspan="1" colspan="1">{{ 'label.tags'|trans }}</th>
+                                            </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div><!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+    </div>
+{% endblock %}

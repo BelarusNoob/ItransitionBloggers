@@ -91,4 +91,17 @@ class PostRepository extends ServiceEntityRepository
             return 2 <= mb_strlen($term);
         });
     }
+
+    public function findByUsername(string $username,int $limit = Post::NUM_ITEMS): array
+    {
+        $queryBuilder = $this->createQueryBuilder('p');
+
+        return $queryBuilder
+            ->where('p.author.username = :username')
+            ->orderBy('p.publishedAt', 'DESC')
+            ->setParameter('username', $username)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 }

@@ -32,3 +32,26 @@
     position: relative;
     padding: 0 2rem;
 }
+
+
+#follow-form {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 0;
+}
+
+#follow-btn {
+    width: 100%;
+    height: 3rem !important;
+    line-height: 2.6rem !important;
+}
+
+.actions-line {
+    display: inline-block;
+}
+
+.section-actions {
+    margin-left: 5px;
+}
+
+

@@ -13,7 +13,7 @@ class DefaultController extends AbstractController
     public function about()
     {
         return $this->render('blog/about.html.twig', [
-            'controller_name' => 'DefaultController',
+            'followers' => $this->getUser()->getFollowers(),
         ]);
     }
 }

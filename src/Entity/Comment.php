@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Comment
 {
+    public const NUM_ITEMS = 10;
     /**
      * @var int
      *

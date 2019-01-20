@@ -1,0 +1,155 @@
+{% extends 'dashboard_base.html.twig' %}
+
+{% block body_id 'dashboard' %}
+
+{% block body %}
+
+        <div class="content-wrapper">
+            <section class="content-header">
+                <h1>
+                    Dashboard
+                    <small>Version 1.0</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="{{ path('dashboard_index') }}"><i class="fa fa-dashboard"></i>Home</a></li>
+                    <li class="active">Dashboard</li>
+                </ol>
+            </section>
+
+            <section class="content">
+
+                {{ include('dashboard/dashboard_components/_dashboard_header_contant.html.twig') }}
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="box">
+                            <div class="box box-info">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Latest Posts</h3>
+
+                                    <div class="box-tools pull-right">
+                                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                                    class="fa fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i
+                                                    class="fa fa-times"></i></button>
+                                    </div>
+                                </div>
+                                <div class="box-body">
+                                    <div class="table-responsive">
+                                        <table class="table no-margin">
+                                            <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Title</th>
+                                                <th>Author</th>
+                                                <th>Published At</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for post in latestPosts %}
+                                                <tr>
+                                                    <td><a href="{{ path('blog_post', {'username': post.author.username, 'slug': post.slug}) }}">{{ post.id }}</a></td>
+                                                    <td><a href="{{ path('blog_post', {'username': post.author.username, 'slug': post.slug}) }}">{{ post.title }}</a></td>
+                                                    <td><a href="#"></a>{{ post.author.username }}</td>
+                                                    <td>{{ post.PublishedAt | date ('h:i:s d:m:y') }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="box-footer clearfix">
+                                    <a href="{{ path('dashboard_posts_new') }}" class="btn btn-sm btn-info btn-flat pull-left">Create New Post</a>
+                                    <a href="{{ path('dashboard_posts_index') }}" class="btn btn-sm btn-default btn-flat pull-right">View
+                                        All Posts</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="box box-danger">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Latest Members</h3>
+
+                                <div class="box-tools pull-right">
+                                    <span class="label label-danger">{{ latestUsers|length }} New Members</span>
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                                class="fa fa-minus"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i
+                                                class="fa fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="box-body no-padding">
+                                <ul class="users-list clearfix">
+                                    {% for user in latestUsers %}
+                                        <li>
+                                            <img src="{{ asset('/uploads/users_photos/' ~ user.getImage()) }}" alt="User Image">
+                                            <a class="users-list-name" href="#">{{ user.username }}</a>
+                                            <span class="users-list-date">{{ user.regDate|date('h:m M d, Y') }}</span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="box-footer text-center">
+                                <a href="javascript:void(0)" class="uppercase">View All Users</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="box">
+                            <div class="box box-info">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Latest Comments</h3>
+
+                                    <div class="box-tools pull-right">
+                                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                                    class="fa fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i
+                                                    class="fa fa-times"></i></button>
+                                    </div>
+                                </div>
+                                <div class="box-body">
+                                    <div class="table-responsive">
+                                        <table class="table no-margin">
+                                            <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Post</th>
+                                                <th>Author</th>
+                                                <th>Published At</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for comment in latestComments %}
+                                                <tr>
+                                                    <td>{{ comment.id }}</a></td>
+                                                    <td><a href="{{ path('blog_post', {'username': comment.post.author.username, 'slug': comment.post.slug}) }}">{{ comment.post.title|slice(0,30) }}</td>
+                                                    <td><a href="#">{{ comment.author.username }}</td>
+                                                    <td>{{ comment.publishedAt|date('h:i:s d:m:y') }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="box-footer clearfix">
+                                    <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat pull-right">View
+                                        All Comments</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+
+{% endblock %}
+

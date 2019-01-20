@@ -64,13 +64,7 @@ class Post
      */
     private $publishedAt;
 
-    /**
-     * @var User
-     *
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $author;
+
 
     /**
      * @var Comment[]|ArrayCollection
@@ -91,15 +85,30 @@ class Post
      * @ORM\ManyToMany(targetEntity="App\Entity\Tag", cascade={"persist"})
      * @ORM\JoinTable(name="post_tag")
      * @ORM\OrderBy({"name": "ASC"})
-     * @Assert\Count(max="4", maxMessage="post.too_many_tags")
+     * @Assert\Count(max="5", maxMessage="post.too_many_tags")
      */
     private $tags;
+
+    /**
+     * @ORM\Column(type="string")
+     *
+     * @Assert\NotBlank(message="Please, upload the picture as a PNG/JPG/JPEG file.")
+     * @Assert\File(mimeTypes={ "image/jpeg", "image/png" , "image/jpg"})
+     */
+    private $image;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="posts")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $author;
 
     public function __construct()
     {
         $this->publishedAt = new \DateTime();
         $this->comments = new ArrayCollection();
         $this->tags = new ArrayCollection();
+        $this->image = 'default.jpg';
     }
 
     public function getId(): int
@@ -145,16 +154,6 @@ class Post
     public function setPublishedAt(?\DateTime $publishedAt): void
     {
         $this->publishedAt = $publishedAt;
-    }
-
-    public function getAuthor(): User
-    {
-        return $this->author;
-    }
-
-    public function setAuthor(?User $author): void
-    {
-        $this->author = $author;
     }
 
     public function getComments(): Collection
@@ -203,5 +202,29 @@ class Post
     public function getTags(): Collection
     {
         return $this->tags;
+    }
+
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    public function setImage($image)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
+
+        return $this;
     }
 }

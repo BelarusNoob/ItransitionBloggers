@@ -1,0 +1,8 @@
+{{ include('blog/_delete_post_confirmation.html.twig') }}
+<form action="{{ url('dashboard_posts_delete', {'username': post.author.username, 'id': post.id}) }}" method="post" data-confirmation="true" id="delete-form" class="actions-line">
+    <input type="hidden" name="token" value="{{ csrf_token('delete') }}" />
+    <button type="submit" class="btn btn-sm btn-danger">
+        <i class="fa fa-trash" aria-hidden="true"></i>
+
+    </button>
+</form>
