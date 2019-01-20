@@ -120,7 +120,7 @@
                         {% endif %}
 
                         {% if is_granted(expression('not is_anonymous()')) %}
-                            <li><a href="{{ path('logout') }}" title="Logout">{% trans %}my_profile{% endtrans %}</a></li>
+                            <li><a href="{{ path('user_profile', {'username': app.user.username}) }}" title="Logout">{% trans %}my_profile{% endtrans %}</a></li>
                             <li><a href="{{ path('logout') }}" title="Logout">{% trans %}logout{% endtrans %}</a></li>
                         {% endif %}
                     </ul>
