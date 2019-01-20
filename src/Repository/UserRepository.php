@@ -18,4 +18,13 @@ class UserRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, User::class);
     }
+
+    public function findLatest(int $limit = User::NUM_ITEMS)
+    {
+        $qb = $this->createQueryBuilder('u')
+            ->orderBy('u.regDate', 'DESC')
+            ->setMaxResults($limit);
+
+        return $qb->getQuery()->execute();
+    }
 }

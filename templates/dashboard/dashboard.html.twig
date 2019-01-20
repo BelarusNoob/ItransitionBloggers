@@ -61,8 +61,8 @@
                                 </div>
 
                                 <div class="box-footer clearfix">
-                                    <a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-left">Create New Post</a>
-                                    <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat pull-right">View
+                                    <a href="{{ path('dashboard_posts_new') }}" class="btn btn-sm btn-info btn-flat pull-left">Create New Post</a>
+                                    <a href="{{ path('dashboard_posts_index') }}" class="btn btn-sm btn-default btn-flat pull-right">View
                                         All Posts</a>
                                 </div>
                             </div>
@@ -75,7 +75,7 @@
                                 <h3 class="box-title">Latest Members</h3>
 
                                 <div class="box-tools pull-right">
-                                    <span class="label label-danger">8 New Members</span>
+                                    <span class="label label-danger">{{ latestUsers|length }} New Members</span>
                                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                                 class="fa fa-minus"></i>
                                     </button>
@@ -86,46 +86,13 @@
                             </div>
                             <div class="box-body no-padding">
                                 <ul class="users-list clearfix">
-                                    <li>
-                                        <img src="{{ asset('images/avatars/user-01.jpg') }}" alt="User Image">
-                                        <a class="users-list-name" href="#">Alexander Pierce</a>
-                                        <span class="users-list-date">Today</span>
-                                    </li>
-                                    <li>
-                                        <img src="{{ asset('images/avatars/user-01.jpg') }}" alt="User Image">
-                                        <a class="users-list-name" href="#">Norman</a>
-                                        <span class="users-list-date">Yesterday</span>
-                                    </li>
-                                    <li>
-                                        <img src="{{ asset('images/avatars/user-01.jpg') }}" alt="User Image">
-                                        <a class="users-list-name" href="#">Jane</a>
-                                        <span class="users-list-date">12 Jan</span>
-                                    </li>
-                                    <li>
-                                        <img src="{{ asset('images/avatars/user-01.jpg') }}" alt="User Image">
-                                        <a class="users-list-name" href="#">John</a>
-                                        <span class="users-list-date">12 Jan</span>
-                                    </li>
-                                    <li>
-                                        <img src="{{ asset('images/avatars/user-01.jpg') }}" alt="User Image">
-                                        <a class="users-list-name" href="#">Alexander</a>
-                                        <span class="users-list-date">13 Jan</span>
-                                    </li>
-                                    <li>
-                                        <img src="{{ asset('images/avatars/user-01.jpg') }}" alt="User Image">
-                                        <a class="users-list-name" href="#">Sarah</a>
-                                        <span class="users-list-date">14 Jan</span>
-                                    </li>
-                                    <li>
-                                        <img src="{{ asset('images/avatars/user-01.jpg') }}" alt="User Image">
-                                        <a class="users-list-name" href="#">Nora</a>
-                                        <span class="users-list-date">15 Jan</span>
-                                    </li>
-                                    <li>
-                                        <img src="{{ asset('images/avatars/user-01.jpg') }}" alt="User Image">
-                                        <a class="users-list-name" href="#">Nadia</a>
-                                        <span class="users-list-date">15 Jan</span>
-                                    </li>
+                                    {% for user in latestUsers %}
+                                        <li>
+                                            <img src="{{ asset('/uploads/users_photos/' ~ user.getImage()) }}" alt="User Image">
+                                            <a class="users-list-name" href="#">{{ user.username }}</a>
+                                            <span class="users-list-date">{{ user.regDate|date('h:m M d, Y') }}</span>
+                                        </li>
+                                    {% endfor %}
                                 </ul>
                             </div>
                             <div class="box-footer text-center">

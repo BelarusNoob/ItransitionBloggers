@@ -52,6 +52,7 @@ class AdminController extends AbstractController
             'comments' => $this->comments->findAll(),
             'latestComments' => $this->comments->findLatest(),
             'users' => $this->users->findAll(),
+            'latestUsers' => $this->users->findLatest(),
             'tags' => $this->tags->findAll()
         ]);
     }
@@ -146,10 +147,9 @@ class AdminController extends AbstractController
      */
     public function edit(Request $request, Post $post): Response
     {
-        if ($post->getImage()!=null) {
-            $post->setImage(
-                new File($this->getParameter('images_directory').'/'.$post->getImage()) );
-        }
+        $post->setImage(
+            new File($this->getParameter('images_directory').'/'.'default.jpg')
+        );
 
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);

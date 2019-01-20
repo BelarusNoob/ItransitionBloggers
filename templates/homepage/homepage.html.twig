@@ -96,9 +96,7 @@
 
                                 <div class="entry__thumb">
                                     <a href="/{{ post.author.username }}/post/{{ post.slug }}" class="entry__thumb-link">
-                                        <img src="{{ asset('/uploads/users_photos/' ~ post.getImage()) }}"
-                                             srcset="{{ asset('/uploads/users_photos/' ~ post.getImage()) }} 1x, {{ asset('/uploads/users_photos/' ~ post.getImage()) }} 2x"
-                                             alt="">
+                                        <img src="{{ asset('/uploads/users_photos/' ~ post.getImage()) }}" alt="">
                                     </a>
                                 </div>
 

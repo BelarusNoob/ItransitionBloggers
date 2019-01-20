@@ -15,6 +15,8 @@ use Symfony\Component\Validator\Constraints\DateTime;
  */
 class User implements UserInterface, \Serializable
 {
+    public const NUM_ITEMS = 10;
+
     /**
      * @var int
      *
