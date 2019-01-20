@@ -18,7 +18,6 @@ class FollowingController extends AbstractController
      */
     public function follow(User $userToFollow)
     {
-        /** @var User $currentUser */
         $currentUser = $this->getUser();
 
         if ($userToFollow->getId() !== $currentUser->getId()) {
@@ -28,9 +27,9 @@ class FollowingController extends AbstractController
                 ->getManager()
                 ->flush();
         }
-        # TODO: change route on user_profile
+
         return $this->redirectToRoute(
-            'homePage',
+            'user_profile',
             ['username' => $userToFollow->getUsername()]
         );
 
@@ -41,7 +40,6 @@ class FollowingController extends AbstractController
      */
     public function unfollow(User $userToUnfollow)
     {
-        /** @var User $currentUser */
         $currentUser = $this->getUser();
         $currentUser->getFollowing()
             ->removeElement($userToUnfollow);
@@ -50,9 +48,8 @@ class FollowingController extends AbstractController
             ->getManager()
             ->flush();
 
-        # TODO: change route on user_profile
         return $this->redirectToRoute(
-            'homePage',
+            'user_profile',
             ['username' => $userToUnfollow->getUsername()]
         );
     }

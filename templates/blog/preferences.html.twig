@@ -4,13 +4,13 @@
 
         {% block body %}
             <div class="pageheader-content row">
-                <div class="col-full"> 
+                <div class="col-full">
 
                     <div class="featured">
 
                         <div class="featured__column featured__column--big">
                             <div class="entry"
-                                 style="background-image:url({{ asset('images/thumbs/featured/featured-guitarman.jpg') }});">
+                                 style="background-image:url('images/thumbs/featured/featured-guitarman.jpg');">
 
                                 <div class="entry__content">
                                     <span class="entry__category"><a href="#0">Music</a></span>
@@ -20,7 +20,7 @@
 
                                     <div class="entry__info">
                                         <a href="#0" class="entry__profile-pic">
-                                            <img class="avatar" src="{{ asset('images/avatars/user-03.jpg') }}" alt="">
+                                            <img class="avatar" src="images/avatars/user-03.jpg" alt="">
                                         </a>
 
                                         <ul class="entry__meta">
@@ -36,7 +36,7 @@
                         <div class="featured__column featured__column--small">
 
                             <div class="entry"
-                                 style="background-image:url({{ asset('images/thumbs/featured/featured-watch.jpg') }});">
+                                 style="background-image:url('images/thumbs/featured/featured-watch.jpg');">
 
                                 <div class="entry__content">
                                     <span class="entry__category"><a href="#0">Management</a></span>
@@ -45,7 +45,7 @@
 
                                     <div class="entry__info">
                                         <a href="#0" class="entry__profile-pic">
-                                            <img class="avatar" src="{{ asset('images/avatars/user-03.jpg') }}" alt="">
+                                            <img class="avatar" src="images/avatars/user-03.jpg" alt="">
                                         </a>
 
                                         <ul class="entry__meta">
@@ -58,7 +58,7 @@
                             </div>
 
                             <div class="entry"
-                                 style="background-image:url({{ asset('images/thumbs/featured/featured-beetle.jpg') }});">
+                                 style="background-image:url('images/thumbs/featured/featured-beetle.jpg');">
 
                                 <div class="entry__content">
                                     <span class="entry__category"><a href="#0">LifeStyle</a></span>
@@ -67,7 +67,7 @@
 
                                     <div class="entry__info">
                                         <a href="#0" class="entry__profile-pic">
-                                            <img class="avatar" src="{{ asset('images/avatars/user-03.jpg') }}" alt="">
+                                            <img class="avatar" src="images/avatars/user-03.jpg" alt="">
                                         </a>
 
                                         <ul class="entry__meta">
@@ -85,55 +85,43 @@
                 </div>
             </div>
             <section class="s-content">
-
+                {{ dump(followers_posts) }}
                 <div class="row masonry-wrap">
                     <div class="masonry">
 
                         <div class="grid-sizer"></div>
 
-                        {% for post in posts %}
+                        {% for post in followers_posts %}
                             <article class="masonry__brick entry format-standard" data-aos="fade-up">
 
-                                <div class="entry__thumb">
-                                    <a href="/{{ post.author.username }}/post/{{ post.slug }}" class="entry__thumb-link">
-                                        <img src="{{ asset('/uploads/users_photos/' ~ post.getImage()) }}" alt="">
-                                    </a>
-                                </div>
 
-                                <div class="entry__text">
-                                    <div class="entry__header">
-
-                                        <div class="entry__date">
-                                            <a href="#">{{ post.publishedAt|date('M d, Y') }}</a>
-                                            <a href="{{ path('user_profile', {'username': post.author.username}) }}">{{ post.author.username }}</a>
-                                        </div>
-                                        <h1 class="entry__title"><a href="/{{ post.author.username }}/post/{{ post.slug }}">{{ post.title }}</a></h1>
-
-                                    </div>
-                                    <div class="entry__excerpt">
-                                        <p>
-                                            {{ post.summary }}  </p>
-                                    </div>
-                                    <div class="entry__meta">
-                                    <span class="entry__meta-links">
-                                         {{ include('blog/_post_tags.html.twig') }}
-                                    </span>
-                                    </div>
-                                </div>
 
                             </article>
                         {% else %}
                             <div class="well">{{ 'post.no_posts_found'|trans }}</div>
                         {% endfor %}
-                        
+
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-full">
                         <nav class="pgn">
+                            <ul>
+                                <li><a class="pgn__prev" href="#0">Prev</a></li>
+                                <li><a class="pgn__num" href="#0">1</a></li>
+                                <li><span class="pgn__num current">2</span></li>
+                                <li><a class="pgn__num" href="#0">3</a></li>
+                                <li><a class="pgn__num" href="#0">4</a></li>
+                                <li><a class="pgn__num" href="#0">5</a></li>
+                                <li><span class="pgn__num dots">…</span></li>
+                                <li><a class="pgn__num" href="#0">8</a></li>
+                                <li><a class="pgn__next" href="#0">Next</a></li>
+                            </ul>
                             {% if posts.haveToPaginate %}
-                                {{ pagerfanta(posts, 'twitter_bootstrap3_translated', {routeName: 'blog_index_paginated', routeParams: app.request.query.all}) }}
+                                <div class="navigation text-center">
+                                    {{ pagerfanta(posts, 'twitter_bootstrap3_translated', {routeName: 'blog_index_paginated', routeParams: app.request.query.all}) }}
+                                </div>
                             {% endif %}
                         </nav>
                     </div>
@@ -151,7 +139,7 @@
                         <div class="block-1-2 block-m-full popular__posts">
                             <article class="col-block popular__post">
                                 <a href="#0" class="popular__thumb">
-                                    <img src="{{ asset('images/thumbs/small/wheel-150.jpg') }}" alt="">
+                                    <img src="images/thumbs/small/wheel-150.jpg" alt="">
                                 </a>
                                 <h5><a href="#0">Visiting Theme Parks Improves Your Health.</a></h5>
                                 <section class="popular__meta">
@@ -162,7 +150,7 @@
                             </article>
                             <article class="col-block popular__post">
                                 <a href="#0" class="popular__thumb">
-                                    <img src="{{ asset('images/thumbs/small/shutterbug-150.jpg') }}" alt="">
+                                    <img src="images/thumbs/small/shutterbug-150.jpg" alt="">
                                 </a>
                                 <h5><a href="#0">Key Benefits Of Family Photography.</a></h5>
                                 <section class="popular__meta">
@@ -173,7 +161,7 @@
                             </article>
                             <article class="col-block popular__post">
                                 <a href="#0" class="popular__thumb">
-                                    <img src="{{ asset('images/thumbs/small/cookies-150.jpg') }}" alt="">
+                                    <img src="images/thumbs/small/cookies-150.jpg" alt="">
                                 </a>
                                 <h5><a href="#0">Absolutely No Sugar Oatmeal Cookies.</a></h5>
                                 <section class="popular__meta">
@@ -184,7 +172,7 @@
                             </article>
                             <article class="col-block popular__post">
                                 <a href="#0" class="popular__thumb">
-                                    <img src="{{ asset('images/thumbs/small/beetle-150.jpg') }}" alt="">
+                                    <img src="images/thumbs/small/beetle-150.jpg" alt="">
                                 </a>
                                 <h5><a href="#0">Throwback To The Good Old Days.</a></h5>
                                 <section class="popular__meta">
@@ -195,7 +183,7 @@
                             </article>
                             <article class="col-block popular__post">
                                 <a href="#0" class="popular__thumb">
-                                    <img src="{{ asset('images/thumbs/small/tulips-150.jpg') }}" alt="">
+                                    <img src="images/thumbs/small/tulips-150.jpg" alt="">
                                 </a>
                                 <h5><a href="#0">10 Interesting Facts About Caffeine.</a></h5>
                                 <section class="popular__meta">
@@ -206,7 +194,7 @@
                             </article>
                             <article class="col-block popular__post">
                                 <a href="#0" class="popular__thumb">
-                                    <img src="{{ asset('images/thumbs/small/salad-150.jpg') }}" alt="">
+                                    <img src="images/thumbs/small/salad-150.jpg" alt="">
                                 </a>
                                 <h5><a href="#0">Healthy Mediterranean Salad Recipes</a></h5>
                                 <section class="popular__meta">

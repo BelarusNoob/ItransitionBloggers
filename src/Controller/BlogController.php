@@ -154,5 +154,31 @@ class BlogController extends AbstractController
 
         return $this->json($results);
     }
+
+    /**
+     * @Route("/preferences", defaults={"page": "1", "_format"="html"}, methods={"GET"}, name="blog_preferences")
+     *
+     * @param Request $request
+     * @param int $page
+     * @param string $_format
+     *
+     * @return Response
+     */
+    public function preferences(Request $request, int $page, string $_format): Response
+    {
+        $Tags = $this->getDoctrine()->getManager()->getRepository(Tag::class)->findAll();
+
+        $tag = null;
+        if ($request->query->has('tag')) {
+            $tag = $this->tags->findOneBy(['name' => $request->query->get('tag')]);
+        }
+        $latestPosts = $this->posts->findLatest($page, $tag);
+
+        return $this->render('blog/preferences.'.$_format.'.twig', [
+            'posts' => $latestPosts,
+            'Tags' => $Tags,
+            'followers_posts' => $this->getUser()->getFollowing(),
+        ]);
+    }
 }
 

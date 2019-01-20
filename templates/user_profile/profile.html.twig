@@ -38,12 +38,12 @@
                                 </ul>
                                 {% if app.user.username != user.username %}
                                     {% if user.followers.contains(app.user) == false %}
-                                        <form id="follow-form" action="{{ path('following_follow', {'id': user.id}) }}" method="post">
-                                            <button type="submit" id="follow-btn" class="btn btn-primary btn-block">Follow</button>
+                                        <form id="profile-follow" action="{{ path('following_follow', {'id': user.id}) }}" method="post">
+                                            <button type="submit" id="follow-btn" class="btn btn-primary btn-block btn-xs">Follow</button>
                                         </form>
                                     {% else %}
-                                        <form id="follow-form" action="{{ path('following_unfollow', {'id': user.id }) }}" method="post">
-                                            <button type="submit" id="follow-btn" class="btn btn-danger btn-block">Unfollow</button>
+                                        <form id="profile-follow" action="{{ path('following_unfollow', {'id': user.id }) }}" method="post">
+                                            <button type="submit" id="follow-btn" class="btn btn-danger btn-block btn-xs">Unfollow</button>
                                         </form>
                                     {% endif %}
                                 {% endif %}
@@ -65,7 +65,9 @@
                         <div class="nav-tabs-custom">
                             <ul class="nav nav-tabs">
                                 <li class="active"><a href="#activity" data-toggle="tab">Activity</a></li>
-                                <li><a href="#settings" data-toggle="tab">Settings</a></li>
+                                {% if app.user.username == user.username %}
+                                    <li><a href="#settings" data-toggle="tab">Settings</a></li>
+                                {% endif %}
                             </ul>
                             <div class="tab-content">
                                 <div class="active tab-pane" id="activity">
