@@ -107,7 +107,7 @@
                             <li><a href="{{ path('blog_preferences') }}" title="">{% trans %}preferences{% endtrans %}</a></li>
                         {% endif %}
 
-                        <li><a href="{{ path('about') }}" title="">{% trans %}about{% endtrans %}</a></li>
+                        <li><a href="{{ path('about') }}" title="About">{% trans %}about{% endtrans %}</a></li>
 
                         {% if is_granted(expression('is_anonymous()')) %}
                             <li><a href="{{ path('login') }}" title="Login">{% trans %}login{% endtrans %}</a></li>

@@ -2,9 +2,11 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\LikeNotification;
 use App\Entity\Post;
 use App\Form\PostType;
 use App\Repository\CommentRepository;
+use App\Repository\LikeNotificationRepository;
 use App\Repository\PostRepository;
 use App\Repository\TagRepository;
 use App\Repository\UserRepository;
@@ -24,18 +26,20 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
  */
 class AdminController extends AbstractController
 {
-    private $users,$posts,$comments,$tags;
+    private $users,$posts,$comments,$tags, $likes;
 
     public function __construct(
                                 UserRepository $users,
                                 PostRepository $posts,
                                 CommentRepository $comments,
-                                TagRepository $tags)
+                                TagRepository $tags,
+                                LikeNotificationRepository $likes)
     {
-        $this->users=$users;
-        $this->posts=$posts;
-        $this->comments=$comments;
-        $this->tags=$tags;
+        $this->users = $users;
+        $this->posts = $posts;
+        $this->comments = $comments;
+        $this->tags = $tags;
+        $this->likes = $likes;
     }
 
     /**
@@ -45,6 +49,7 @@ class AdminController extends AbstractController
      */
     public function index(): Response
     {
+
         return $this->render('dashboard/dashboard.html.twig', [
             'controller_name' => 'AdminController',
             'posts' => $this->posts->findAll(),
@@ -53,7 +58,8 @@ class AdminController extends AbstractController
             'latestComments' => $this->comments->findLatest(),
             'users' => $this->users->findAll(),
             'latestUsers' => $this->users->findLatest(),
-            'tags' => $this->tags->findAll()
+            'tags' => $this->tags->findAll(),
+            'likes' => $this->likes->findAll(),
         ]);
     }
 

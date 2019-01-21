@@ -103,6 +103,15 @@ class Post
      */
     private $author;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="postsLiked")
+     * @ORM\JoinTable(name="post_likes",
+     *     joinColumns={@ORM\JoinColumn(name="post_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")}
+     * )
+     */
+    private $likedBy;
+
     public function __construct()
     {
         $this->publishedAt = new \DateTime();
@@ -226,5 +235,22 @@ class Post
         $this->author = $author;
 
         return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getLikedBy()
+    {
+        return $this->likedBy;
+    }
+
+    public function like(User $user)
+    {
+        if ($this->likedBy->contains($user)) {
+            return;
+        }
+
+        $this->likedBy->add($user);
     }
 }

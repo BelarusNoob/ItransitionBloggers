@@ -60,3 +60,25 @@
     line-height: 3rem !important;
 }
 
+.like-btn {
+    height: 1rem;
+    line-height: 1rem;
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+.like-btn:hover {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.like-badge {
+    padding: 0;
+    background-color: transparent;
+    vertical-align: top;
+    line-height: 0.8;
+}
+
+

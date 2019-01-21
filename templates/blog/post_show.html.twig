@@ -9,6 +9,7 @@
         <article class="row format-standard">
 
             <div class="s-content__header col-full">
+
                 <h1 class="s-content__header-title">
                     {{ post.title }}
                 </h1>
@@ -24,6 +25,24 @@
                             {% endfor %}
                         </li>
                     {% endif %}
+
+                    <li>
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                            {% set isLiked = post.getLikedBy.contains(app.user) %}
+                            <div class="pt-2">
+                                <button style="display: {% if not isLiked %}block{% else %}none{% endif %}"
+                                        class="btn btn-xs btn-flat pull-left like-btn" id="like"><i class="fa fa-thumbs-o-up margin-r-5"></i> Like
+                                    <span class="badge badge-light like-badge" id="likes-like">{{ post.getLikedBy.count }}</span>
+                                </button>
+
+                                <button style="display: {% if isLiked %}block{% else %}none{% endif %}"
+                                        class="btn btn-xs btn-flat pull-left like-btn" id="unlike"><i class="fa fa-thumbs-o-down margin-r-5"></i>Unlike
+                                    <span class="badge badge-light like-badge" id="likes-unlike">{{ post.getLikedBy.count }}</span>
+                                </button>
+                            </div>
+                        {% endif %}
+                    </li>
+
                 </ul>
             </div>
 
@@ -52,17 +71,20 @@
                     <div class="s-content__author-about">
                         <h4 class="s-content__author-name">
                             <a href="{{ path('user_profile', {'username': post.author.username}) }}">{{ post.author.username }}</a>
-                            {% if app.user.username != post.author.username %}
-                                {% if post.author.followers.contains(app.user) == false %}
-                                    <form id="follow-form" action="{{ path('following_follow', {'id': post.author.id}) }}" method="post">
-                                        <button type="submit" id="follow-btn" class=" submit btn--primary btn--large full-width">Follow</button>
-                                    </form>
-                                {% else %}
-                                    <form id="follow-form" action="{{ path('following_unfollow', {'id': post.author.id }) }}" method="post">
-                                        <button type="submit" id="follow-btn" class=" submit btn--danger btn--large full-width">Unfollow</button>
-                                    </form>
+                            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                {% if app.user.username != post.author.username %}
+                                    {% if post.author.followers.contains(app.user) == false %}
+                                        <form id="follow-form" action="{{ path('following_follow', {'id': post.author.id}) }}" method="post">
+                                            <button type="submit" id="follow-btn" class=" submit btn--primary btn--large full-width">Follow</button>
+                                        </form>
+                                    {% else %}
+                                        <form id="follow-form" action="{{ path('following_unfollow', {'id': post.author.id }) }}" method="post">
+                                            <button type="submit" id="follow-btn" class=" submit btn--danger btn--large full-width">Unfollow</button>
+                                        </form>
+                                    {% endif %}
                                 {% endif %}
                             {% endif %}
+
                         </h4>
 
                         <p>{{ post.author.info }} </p>
@@ -94,6 +116,52 @@
         {{ include('blog/_comments.html.twig') }}
 
     </section>
+
+    <script>
+        var likeButton = document.getElementById('like');
+        var unlikeButton = document.getElementById('unlike');
+
+        addOnClick(
+            likeButton,
+            unlikeButton,
+            document.getElementById('likes-unlike'),
+            '{{ path('likes_like', {'id': post.id}) }}'
+        );
+
+        addOnClick(
+            unlikeButton,
+            likeButton,
+            document.getElementById('likes-like'),
+            '{{ path('likes_unlike', {'id': post.id}) }}'
+        );
+
+        function switchButtons(button, oppositeButton) {
+            button.disabled = false;
+            button.style.display = 'none';
+            oppositeButton.style.display = 'block';
+        }
+
+        function addOnClick(button, oppositeButton, likeCount, path) {
+            button.addEventListener('click', function (event) {
+                {% if not app.user %}
+                    return window.location.replace('{{ path('userRegistration') }}');
+                {% endif %}
+
+                button.disabled = true;
+
+                fetch(path, {'credentials': 'include'}).then(function (response) {
+                    response.json().then(function (json) {
+                        likeCount.innerText = json.count;
+                        switchButtons(button, oppositeButton);
+                    })
+                }).catch(function () {
+                    switchButtons(button, oppositeButton);
+                });
+
+                event.preventDefault();
+            });
+        }
+    </script>
 {% endblock %}
 
 
