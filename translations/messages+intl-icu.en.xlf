@@ -145,6 +145,34 @@
                 <source>label.cancel</source>
                 <target>Cancel</target>
             </trans-unit>
+            <trans-unit id="label.info">
+                <source>label.info</source>
+                <target>Info</target>
+            </trans-unit>
+            <trans-unit id="label.facebook">
+                <source>label.facebook</source>
+                <target>Facebook</target>
+            </trans-unit>
+            <trans-unit id="label.twitter">
+                <source>label.twitter</source>
+                <target>Twitter</target>
+            </trans-unit>
+            <trans-unit id="label.pinterest">
+                <source>label.pinterest</source>
+                <target>Pinterest</target>
+            </trans-unit>
+            <trans-unit id="label.instagram">
+                <source>label.instagram</source>
+                <target>Instagram</target>
+            </trans-unit>
+            <trans-unit id="title.your_message">
+                <source>title.your_message</source>
+                <target>Your message</target>
+            </trans-unit>
+            <trans-unit id="user.my_posts">
+                <source>user.my_posts</source>
+                <target>My Posts</target>
+            </trans-unit>
             <trans-unit id="action.create_post">
                 <source>action.create_post</source>
                 <target>Create a new post</target>
@@ -514,6 +542,11 @@
      <trans-unit id="password">
          <source>Password</source>
          <target>Password</target>
+     </trans-unit>
+
+     <trans-unit id="Forgot_Password">
+         <source>Forgot_Password</source>
+         <target>Forgot Password?</target>
      </trans-unit>
 
      <trans-unit id="to_register_you_need_to">

@@ -1,36 +1,39 @@
 <ul class="sidebar-menu" data-widget="tree">
     <li class="header">MAIN NAVIGATION</li>
-    <li>
-        <a href="{{ path('dashboard_index') }}">
-            <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-        </a>
-    </li>
-    <li>
-        <a href="#">
-            <i class="fa fa-user"></i> <span>Users</span>
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('dashboard_posts_index') }}">
-            <i class="fa fa-table"></i> <span>Posts</span>
-        </a>
-    </li>
-    <li>
-        <a href="#">
-            <i class="fa fa-tag"></i> <span>Tags</span>
-        </a>
-    </li>
-    <li>
-        <a href="#">
-            <i class="fa fa-comment"></i> <span>Comments</span>
-        </a>
-    </li>
-    <li>
-        <a href="#">
-            <i class="fa fa-cog"></i> <span>Settings</span>
-        </a>
-    </li>
-    <li>
-    <li><a href="https://adminlte.io/docs"><i class="fa fa-book"></i> <span>Documentation</span></a>
-    </li>
+    {% if is_granted('ROLE_ADMIN') %}
+        <li>
+            <a href="{{ path('dashboard_index') }}">
+                <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+            </a>
+        </li>
+    {% endif %}
+    {% if is_granted(['ROLE_ADMIN', 'ROLE_MODERATOR']) %}
+        <li>
+            <a href="#">
+                <i class="fa fa-user"></i> <span>Users</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ path('dashboard_posts_index') }}">
+                <i class="fa fa-table"></i> <span>Posts</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="fa fa-tag"></i> <span>Tags</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="fa fa-comment"></i> <span>Comments</span>
+            </a>
+        </li>
+    {% endif %}
+    {% if is_granted('ROLE_BLOGGER') %}
+        <li>
+            <a href="{{ path('dashboard_posts_index') }}">
+                <i class="fa fa-table"></i><span>My Posts</span>
+            </a>
+        </li>
+    {% endif %}
 </ul>

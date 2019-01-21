@@ -144,6 +144,10 @@ class User implements UserInterface, \Serializable
      */
     private $posts;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Post", mappedBy="likedBy")
+     */
+    private $postsLiked;
 
     public function __construct()
     {

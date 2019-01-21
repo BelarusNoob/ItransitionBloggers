@@ -118,6 +118,7 @@ class Post
         $this->comments = new ArrayCollection();
         $this->tags = new ArrayCollection();
         $this->image = 'default.jpg';
+        $this->likedBy = new ArrayCollection();
     }
 
     public function getId(): int

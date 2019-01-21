@@ -16,7 +16,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12">
-                                <label for="password" class="required">{% trans %}password{% endtrans %}</label>
+                                <label for="password" class="required">{% trans %}label.password{% endtrans %}</label>
                                 <input class="form-control" type="password" id="password" name="_password">
                                 <input type="hidden" name="_target_path" value="{{ app.request.get('redirect_to') }}"/>
                                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
@@ -30,7 +30,7 @@
                         <div class="form-group">
                             <div class="col-sm-12">
                                 <button type="submit" class="btn btn-default">{% trans %}login{% endtrans %}</button>
-                                <a class="btn btn-default" href="#" > {% trans %} Forgot Password? {% endtrans %}</a>
+                                <a class="btn btn-default" href="#" > {% trans %} Forgot_Password {% endtrans %}</a>
                             </div>
                         </div>
                     </form>

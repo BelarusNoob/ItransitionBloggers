@@ -1,8 +1,22 @@
 <header class="main-header">
 
     <a href="{{ path('dashboard_index') }}" class="logo">
-        <span class="logo-mini"><b>D</b>IB</span>
-        <span class="logo-lg"><b>Dashboard</b>Admin</span>
+        {% if is_granted('ROLE_ADMIN')%}
+            <span class="logo-mini"><b>D</b>IB</span>
+            <span class="logo-lg"><b>Dashboard</b>Admin</span>
+        {% endif %}
+        {% if is_granted('ROLE_MODERATOR')%}
+            <span class="logo-mini"><b>D</b>IB</span>
+            <span class="logo-lg"><b>Dashboard</b>Moderator</span>
+        {% endif %}
+        {% if is_granted('ROLE_BLOGGER')%}
+            <span class="logo-mini"><b>D</b>IB</span>
+            <span class="logo-lg"><b>Dashboard</b>Blogger</span>
+        {% endif %}
+        {% if is_granted('ROLE_USER')%}
+            <span class="logo-mini"><b>U</b>P</span>
+            <span class="logo-lg"><b>User</b>Profile</span>
+        {% endif %}
     </a>
 
     <nav class="navbar navbar-static-top">

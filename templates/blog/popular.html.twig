@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'top' %}
+
+        {% block body %}
+            <div class="pageheader-content row">
+            </div>
+            <section class="s-content">
+
+                <div class="row masonry-wrap">
+                    <div class="masonry">
+
+                        <div class="grid-sizer"></div>
+
+                       {{ dump('likedPosts') }}
+                        
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-full">
+
+                    </div>
+                </div>
+
+            </section>
+        {% endblock %}

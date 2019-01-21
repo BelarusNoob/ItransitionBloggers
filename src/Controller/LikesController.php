@@ -73,4 +73,12 @@ class LikesController extends AbstractController
             'count' => $post->getLikedBy()->count()
         ]);
     }
+
+
+    public function popular(): Response
+    {
+        return $this->render('blog/popular.html.twig', [
+            'likedPosts' => $this->posts->findPopular()
+        ]);
+    }
 }

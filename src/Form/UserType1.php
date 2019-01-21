@@ -45,6 +45,21 @@ class UserType1 extends AbstractType
                     ]),
                 ],
             ])
+            ->add('info', TextType::class, [
+                'label' => 'label.info',
+            ])
+            ->add('facebook', TextType::class, [
+                'label' => 'label.facebook',
+            ])
+            ->add('twitter', TextType::class, [
+                'label' => 'label.twitter',
+            ])
+            ->add('pinterest', TextType::class, [
+                'label' => 'label.pinterest',
+            ])
+            ->add('instagram', TextType::class, [
+                'label' => 'label.instagram',
+            ])
         ;
     }
 

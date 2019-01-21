@@ -69,12 +69,6 @@
                         <a href="#0"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
                     </li>
                 </ul>
-
-                <!--  <ul class="header__menu">
-                        <li><a class="current" href="{{ path('login') }}" title="">Login</a></li>
-                        <li><a class="current" href="{{ path('userRegistration') }}" title="">Register</a></li>
-                    </ul> -->
-
                 <a class="header__search-trigger" href="#0"></a>
 
                 <div class="header__search">
@@ -101,13 +95,11 @@
 
                     <ul class="header__nav">
                         <li class="current"><a href="{{ path('homePage') }}" title="">{% trans %}all_posts{% endtrans %}</a></li>
-                        <li><a href="#" title="Popular">{% trans %}popular{% endtrans %}</a></li>
+                        <li><a href="#" title="All Posts">{% trans %}popular{% endtrans %}</a></li>
 
                         {% if is_granted(expression('not is_anonymous()')) %}
-                            <li><a href="{{ path('blog_preferences') }}" title="">{% trans %}preferences{% endtrans %}</a></li>
+                            <li><a href="{{ path('blog_preferences') }}" title="Preferences">{% trans %}preferences{% endtrans %}</a></li>
                         {% endif %}
-
-                        <li><a href="{{ path('about') }}" title="About">{% trans %}about{% endtrans %}</a></li>
 
                         {% if is_granted(expression('is_anonymous()')) %}
                             <li><a href="{{ path('login') }}" title="Login">{% trans %}login{% endtrans %}</a></li>
@@ -115,12 +107,16 @@
                         {% endif %}
 
                         {% if is_granted('ROLE_ADMIN', expression('not is_anonymous()')) %}
-                            <li><a href="{{ path('dashboard_index') }}" title="Logout">Admin Dashboard</a></li>
+                            <li><a href="{{ path('dashboard_index') }}" title="Admin Dashboard">Admin Dashboard</a></li>
+                        {% endif %}
+
+                        {% if is_granted(['ROLE_BLOGGER', 'ROLE MODERATOR'], expression('not is_anonymous()')) %}
+                            <li><a href="{{ path('my_post_index') }}" title="My Posts">{{ 'user.my_posts'|trans }}</a></li>
                         {% endif %}
 
                         {% if is_granted(expression('not is_anonymous()')) %}
                             <li><a href="{{ path('user_profile', {'username': app.user.username}) }}" title="Logout">{% trans %}my_profile{% endtrans %}</a></li>
-                            <li><a href="{{ path('logout') }}" title="Logout">{% trans %}logout{% endtrans %}</a></li>
+                            <li><a href="{{ path('logout') }}" title="My Profile">{% trans %}logout{% endtrans %}</a></li>
                         {% endif %}
                     </ul>
 
@@ -166,12 +162,30 @@
                     <h4>Quick Links</h4>
 
                     <ul class="s-footer__linklist">
-                        <li><a href="#0">All posts</a></li>
-                        <li><a href="#0">Popular</a></li>
-                        <li><a href="#0">About</a></li>
-                        <li><a href="#0">Contact</a></li>
-                        <li><a href="#0">MyProfile</a></li>
-                        <li><a href="#0">Logout</a></li>
+                        <li class="current"><a href="{{ path('homePage') }}" title="">{% trans %}all_posts{% endtrans %}</a></li>
+                        <li><a href="#" title="All Posts">{% trans %}popular{% endtrans %}</a></li>
+
+                        {% if is_granted(expression('not is_anonymous()')) %}
+                            <li><a href="{{ path('blog_preferences') }}" title="Preferences">{% trans %}preferences{% endtrans %}</a></li>
+                        {% endif %}
+
+                        {% if is_granted(expression('is_anonymous()')) %}
+                            <li><a href="{{ path('login') }}" title="Login">{% trans %}login{% endtrans %}</a></li>
+                            <li><a href="{{ path('userRegistration') }}" title="Register">{% trans %}register{% endtrans %}</a></li>
+                        {% endif %}
+
+                        {% if is_granted('ROLE_ADMIN', expression('not is_anonymous()')) %}
+                            <li><a href="{{ path('dashboard_index') }}" title="Admin Dashboard">Admin Dashboard</a></li>
+                        {% endif %}
+
+                        {% if is_granted(['ROLE_BLOGGER', 'ROLE MODERATOR'], expression('not is_anonymous()')) %}
+                            <li><a href="{{ path('my_post_index') }}" title="My Posts">{{ 'user.my_posts'|trans }}</a></li>
+                        {% endif %}
+
+                        {% if is_granted(expression('not is_anonymous()')) %}
+                            <li><a href="{{ path('user_profile', {'username': app.user.username}) }}" title="Logout">{% trans %}my_profile{% endtrans %}</a></li>
+                            <li><a href="{{ path('logout') }}" title="My Profile">{% trans %}logout{% endtrans %}</a></li>
+                        {% endif %}
                     </ul>
 
                 </div>

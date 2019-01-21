@@ -85,6 +85,11 @@ class AdminController extends AbstractController
     public function new(Request $request): Response
     {
         $post = new Post();
+
+        $post->setImage(
+            new File($this->getParameter('images_directory').'/'.'default.jpg')
+        );
+
         $post->setAuthor($this->getUser());
 
         $form = $this->createForm(PostType::class, $post)

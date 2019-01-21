@@ -12,7 +12,7 @@
 
             {{ form_errors(form.content) }}
             <div class="message form-field">
-                {{ form_widget(form.content, {attr: {class: 'full-width', id: 'cMessage', name: 'cMessage', placeholder: 'Your Message'} }) }}
+                {{ form_widget(form.content, {attr: {class: 'full-width', id: 'cMessage', name: 'cMessage', placeholder: 'title.your_message'|trans } }) }}
             </div>
 
             {{ form_help(form.content) }}
