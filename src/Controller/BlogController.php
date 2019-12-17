@@ -133,26 +133,12 @@ class BlogController extends AbstractController
      */
     public function search(Request $request): Response
     {
-        if (!$request->isXmlHttpRequest()) {
-            return $this->render('blog/search.html.twig');
-        }
-
         $query = $request->query->get('q', '');
-        $limit = $request->query->get('l', 10);
-        $foundPosts = $this->posts->findBySearchQuery($query, $limit);
+        $foundPosts = $this->posts->findBySearchQuery($query, 10);
 
-        $results = [];
-        foreach ($foundPosts as $post) {
-            $results[] = [
-                'title' => htmlspecialchars($post->getTitle(), ENT_COMPAT | ENT_HTML5),
-                'date' => $post->getPublishedAt()->format('M d, Y'),
-                'author' => htmlspecialchars($post->getAuthor()->getFullName(), ENT_COMPAT | ENT_HTML5),
-                'summary' => htmlspecialchars($post->getSummary(), ENT_COMPAT | ENT_HTML5),
-                'url' => $this->generateUrl('blog_post', ['slug' => $post->getSlug()]),
-            ];
-        }
-
-        return $this->json($results);
+        return $this->render('blog/search.html.twig', [
+            'posts' => $foundPosts,
+        ]);
     }
 }
 

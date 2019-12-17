@@ -3,6 +3,7 @@
 {% block body_id 'blog_search' %}
 
 {% block body %}
+
     <form action="{{ path('blog_search') }}" method="get">
         <div class="form-group">
             <input name="q"
@@ -16,6 +17,52 @@
     </form>
 
     <div id="results">
+        <section class="s-content">
+
+            <div class="row masonry-wrap">
+                <div class="masonry">
+
+                    <div class="grid-sizer"></div>
+
+                    {% for post in posts %}
+                        <article class="masonry__brick entry format-standard" data-aos="fade-up">
+
+                            <div class="entry__thumb">
+                                <a href="/{{ post.author.username }}/post/{{ post.slug }}" class="entry__thumb-link">
+                                    <img src="{{ asset('/uploads/users_photos/' ~ post.getImage()) }}" alt="">
+                                </a>
+                            </div>
+
+                            <div class="entry__text">
+                                <div class="entry__header">
+
+                                    <div class="entry__date">
+                                        <a href="#">{{ post.publishedAt|date('M d, Y') }}</a>
+                                        <a href="{{ path('user_profile', {'username': post.author.username}) }}">{{ post.author.username }}</a>
+                                    </div>
+                                    <h1 class="entry__title"><a href="/{{ post.author.username }}/post/{{ post.slug }}">{{ post.title }}</a></h1>
+
+                                </div>
+                                <div class="entry__excerpt">
+                                    <p>
+                                        {{ post.summary }}  </p>
+                                </div>
+                                <div class="entry__meta">
+                                    <span class="entry__meta-links">
+                                         {{ include('blog/_post_tags.html.twig') }}
+                                    </span>
+                                </div>
+                            </div>
+
+                        </article>
+                    {% else %}
+                        <div class="well">{{ 'post.no_posts_found'|trans }}</div>
+                    {% endfor %}
+
+                </div>
+            </div>
+
+        </section>
     </div>
 {% endblock %}
 

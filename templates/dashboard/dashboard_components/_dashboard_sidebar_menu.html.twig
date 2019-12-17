@@ -9,7 +9,7 @@
     {% endif %}
     {% if is_granted(['ROLE_ADMIN', 'ROLE_MODERATOR']) %}
         <li>
-            <a href="#">
+            <a href="{{ path('dashboard_users_index') }}">
                 <i class="fa fa-user"></i> <span>Users</span>
             </a>
         </li>

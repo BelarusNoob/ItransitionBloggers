@@ -64,6 +64,17 @@ class AdminController extends AbstractController
     }
 
     /**
+     * @Route("/users", methods={"GET"}, name="dashboard_users_index")
+     *
+     * @return Response
+     */
+
+    public function users(): Response
+    {
+        return $this->render('dashboard/user/index.html.twig', ['users' => $this->users->findAll()]);
+    }
+
+    /**
      * @Route("/posts", methods={"GET"}, name="dashboard_posts_index")
      *
      * @return Response
@@ -71,12 +82,11 @@ class AdminController extends AbstractController
 
     public function blog(): Response
     {
-
         return $this->render('dashboard/posts/posts.html.twig', ['posts' => $this->posts->findAll()]);
     }
 
     /**
-     * @Route("/new", methods={"GET", "POST"}, name="dashboard_posts_new")
+     * @Route("/post/new", methods={"GET", "POST"}, name="dashboard_posts_new")
      *
      * @param Request $request
      *
@@ -87,7 +97,7 @@ class AdminController extends AbstractController
         $post = new Post();
 
         $post->setImage(
-            new File($this->getParameter('images_directory').'/'.'default.jpg')
+            new File($this->getParameter('images_directory').'/'.'user.png')
         );
 
         $post->setAuthor($this->getUser());
@@ -159,7 +169,7 @@ class AdminController extends AbstractController
     public function edit(Request $request, Post $post): Response
     {
         $post->setImage(
-            new File($this->getParameter('images_directory').'/'.'default.jpg')
+            new File($this->getParameter('images_directory').'/'.'user.png')
         );
 
         $form = $this->createForm(PostType::class, $post);
